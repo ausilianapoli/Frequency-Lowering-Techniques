@@ -31,11 +31,6 @@ class AudioManaging:
               .format(entry[2].shape))
         ttl = list(entry[2].shape) #to extract tuple's values as int first it converts into list
         shape = ttl.pop() #and then it is popped the single element of list
-        #samplerate = entry[1]
-        #print(shape)
-        #print(type(shape))
-        #print(samplerate)
-        #print(type(samplerate))
         print("\tduration: {} seconds"\
               .format(str(round(shape/entry[1]))))
     
