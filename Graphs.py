@@ -28,7 +28,7 @@ class Graphs:
         
     def spectrogram(self, entry): #input: read file
         plt.figure()
-        plt.specgram(entry[2], Fs = entry[1]) #left channel
+        plt.specgram(entry[2], Fs = entry[1])
         plt.xlabel("Time")
         plt.ylabel("Frequency")
         plt.title("Spectrogram: {}"\
