@@ -15,7 +15,8 @@ class FourierTransform:
     def time_to_frequency(self, entry): #input: read file
         datafft = fft(entry[2])
         fftabs = abs(datafft)
-        shape, channels = entry[2].shape
+        ttl = list(entry[2].shape) #to extract tuple's values as int first it converts into list
+        shape = ttl.pop() #and then it is popped the single element of list
         freqs = fftfreq(shape, 1./entry[1])
         t = (fftabs, freqs)
         self.audio_fft.append(t)

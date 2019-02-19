@@ -12,14 +12,13 @@ from Graphs import Graphs
 def test_AudioManaging_1(): #first operations on files
     a = AudioManaging()
     for i in range (1, 5):
-        a.read_file("records/sample_{:d}n.wav"\
+        path = a.join_audio_channels("records/sample_{:d}n.wav"\
                     .format(i))
+        a.read_file(path)
     for i in range(0, 4):
         entry = a.audio_file[i]
         a.print_metadata(entry)
     return a.audio_file
-    #a.convert_numpy
-    #a.save_file(idx, samplerate, signal)
     
 def test_AudioManaging_2(list_ifft, list_file): #last operation on files
     a = AudioManaging()

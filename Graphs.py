@@ -27,18 +27,10 @@ class Graphs:
         plt.show()
         
     def spectrogram(self, entry): #input: read file
-        plt.figure(figsize = (6, 10))
-        plt.subplot(2, 1, 1)
-        plt.specgram(entry[2][:,0], Fs = entry[1]) #left channel
+        plt.figure()
+        plt.specgram(entry[2], Fs = entry[1]) #left channel
         plt.xlabel("Time")
         plt.ylabel("Frequency")
-        plt.title("Spectrogram left channel: {}"\
+        plt.title("Spectrogram: {}"\
                   .format(entry[0]))
-        plt.subplot(2, 1, 2)
-        plt.specgram(entry[2][:,1], Fs = entry[1]) #right channel
-        plt.xlabel("Time")
-        plt.ylabel("Frequency")
-        plt.title("Spectrogram right channel: {}"\
-                  .format(entry[0]))
-        #plt.subplots_adjust(hspace=0.8) 
         plt.show()
