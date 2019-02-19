@@ -9,15 +9,20 @@ from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
 
-def test_AudioManaging_1(): #first operations on files
+def test_AudioManaging_1(first=1): #first=1 for initial operations on input; first=0 for last operation on output
     a = AudioManaging()
-    for i in range (1, 5):
-        path = a.join_audio_channels("records/sample_{:d}n.wav"\
-                    .format(i))
-        a.read_file(path)
-    for i in range(0, 4):
-        entry = a.audio_file[i]
-        a.print_metadata(entry)
+    if first == 1:
+        for i in range (1, 5):
+            path = a.join_audio_channels("records/sample_{:d}n.wav"\
+                        .format(i))
+            a.read_file(path)
+        for i in range(0, 4):
+            entry = a.audio_file[i]
+            a.print_metadata(entry)
+    else:
+       for i in range (1, 5):
+           a.read_file("records/output_{:d}.wav"\
+            .format(i)) 
     return a.audio_file
     
 def test_AudioManaging_2(list_ifft, list_file): #last operation on files
@@ -25,16 +30,6 @@ def test_AudioManaging_2(list_ifft, list_file): #last operation on files
     for i in range(len(list_ifft)):
         signal = a.convert_numpy(list_ifft[i])
         a.save_file(i+1, list_file[i][1], signal)
-        
-def test_AudioManaging_3(): #read output
-    a = AudioManaging()
-    for i in range (1, 5):
-        a.read_file("records/output_{:d}.wav"\
-                    .format(i))
-    for i in range(0, 4):
-        entry = a.audio_file[i]
-        a.print_metadata(entry)
-    return a.audio_file
     
 def test_FourierTransform_1(list_file): #from time to frequency space
     f = FourierTransform()
@@ -69,5 +64,5 @@ list_fft = test_FourierTransform_1(list_file)
 list_ifft = test_FourierTransform_2(list_fft)
 test_Graphs_1(list_file, list_fft)
 test_AudioManaging_2(list_ifft, list_file)
-list_file_out = test_AudioManaging_3()
+list_file_out = test_AudioManaging_1(0)
 test_Graphs_2(list_file_out)
