@@ -50,7 +50,7 @@ def test_Graphs_1(list_file, list_fft): #for input
         g.frequency_spectrum(list_fft[i], list_file[i])
         g.spectrogram(list_file[i])
         
-def test_Graphs_2(list_file_out):
+def test_Graphs_2(list_file_out): #for output
     g = Graphs()
     for i in range(len(list_file)):
         g.waveform(list_file[i])
