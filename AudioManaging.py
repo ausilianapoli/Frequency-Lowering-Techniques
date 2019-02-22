@@ -7,8 +7,9 @@ Created on Mon Feb 18 17:05:57 2019
 
 from scipy.io import wavfile
 import numpy as np
-#import subprocess as sp
+import subprocess as sp
 import os
+import platform
 
 class AudioManaging:
     
@@ -44,7 +45,8 @@ class AudioManaging:
     def save_file(self, idx, samplerate, signal):
         wavfile.write("./records/output_{}.wav"\
                       .format(idx), samplerate, signal)
-        
+    
+    #It allows to join audio channels to only one
     def join_audio_channels(self, path):
         idx = 0
         for s in path:
@@ -53,8 +55,13 @@ class AudioManaging:
                 break
         name = "./records/sample_{}m.wav"\
                 .format(idx)
-        cmdffmpeg = "ffmpeg -i {} -ac 1 -f wav {}"\
-                    .format(path, name)
-        os.system(cmdffmpeg)
+        if platform.system() == "Linux":
+            cmdffmpeg_L = "ffmpeg -i {} -ac 1 -f wav {}"\
+                        .format(path, name)
+            os.system(cmdffmpeg_L)
+        elif platform.system() == "Windows":
+            cmdffmpeg_W = "./ffmpeg/bin/ffmpeg -i {} -ac 1 -f wav {}"\
+                        .format(path, name)
+            sp.call(cmdffmpeg_W)
         return name
               

@@ -18,6 +18,8 @@ class FourierTransform:
         ttl = list(entry[2].shape) #to extract tuple's values as int first it converts into list
         shape = ttl.pop() #and then it is popped the single element of list
         freqs = fftfreq(shape, 1./entry[1])
+        #print("freqs: ", freqs)
+        #print("freq 4000: ", freqs[4000])
         t = (fftabs, freqs)
         self.audio_fft.append(t)
         
