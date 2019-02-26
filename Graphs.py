@@ -31,6 +31,8 @@ class Graphs:
         plt.specgram(entry[2], Fs = entry[1])
         plt.xlabel("Time")
         plt.ylabel("Frequency")
+        plt.xlabel("Time")
+        plt.ylabel("Frequency")
         plt.title("Spectrogram: {}"\
                   .format(entry[0]))
         plt.show()

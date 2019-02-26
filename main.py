@@ -8,6 +8,7 @@ Created on Mon Feb 18 19:19:19 2019
 from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
+from FrequencyCompression import FrequencyCompression
 
 def test_AudioManaging_1(first=1): #first=1 for initial operations on input; first=0 for last operation on output
     a = AudioManaging()
@@ -15,21 +16,23 @@ def test_AudioManaging_1(first=1): #first=1 for initial operations on input; fir
         for i in range (1, 5):
             path = a.join_audio_channels("records/sample_{:d}n.wav"\
                         .format(i))
+            path = a.resampling(path)
             a.read_file(path)
         for i in range(0, 4):
             entry = a.audio_file[i]
             a.print_metadata(entry)
     else:
        for i in range (1, 5):
-           a.read_file("records/output_{:d}.wav"\
-            .format(i)) 
+           path = a.join_audio_channels("records/output_{:d}.wav"\
+                        .format(i), 1)
+           a.read_file(path) 
     return a.audio_file
     
 def test_AudioManaging_2(list_ifft, list_file): #last operation on files
     a = AudioManaging()
     for i in range(len(list_ifft)):
         signal = a.convert_numpy(list_ifft[i])
-        a.save_file(i+1, list_file[i][1], signal)
+        a.save_file(i+1, list_file[i][1], signal.T)
     
 def test_FourierTransform_1(list_file): #from time to frequency space
     f = FourierTransform()
@@ -55,14 +58,25 @@ def test_Graphs_2(list_file_out): #for output
     for i in range(len(list_file)):
         g.waveform(list_file[i])
         g.spectrogram(list_file[i])
-    
+
+def test_FrequencyCompression(list_fft, CR, samplerate):
+    fc = FrequencyCompression(cutoff, ratio, CR, samplerate)
+    for i in range(len(list_fft)):
+        fc.technique_4B(list_fft[i])
+    return fc.audio_fc
     
 #---- MAIN ----
 
+cutoff = 4000
+ratio = 0.5
+CR = 2
+samplerate = 16000
+
 list_file = test_AudioManaging_1()
 list_fft = test_FourierTransform_1(list_file)
-list_ifft = test_FourierTransform_2(list_fft)
 test_Graphs_1(list_file, list_fft)
+list_fc = test_FrequencyCompression(list_fft, samplerate, CR)
+list_ifft = test_FourierTransform_2(list_fc)
 test_AudioManaging_2(list_ifft, list_file)
 list_file_out = test_AudioManaging_1(0)
 test_Graphs_2(list_file_out)

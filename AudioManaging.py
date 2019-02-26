@@ -47,20 +47,42 @@ class AudioManaging:
                       .format(idx), samplerate, signal)
     
     #It allows to join audio channels to only one
-    def join_audio_channels(self, path):
+    def join_audio_channels(self, path, out = 0): #out = 1 for join channels of audio output
         idx = 0
         for s in path:
             if s.isdigit() == True:
                 idx = s
                 break
-        name = "./records/sample_{}m.wav"\
-                .format(idx)
+        if out == 0:
+            name = "./records/sample_{}m.wav"\
+                    .format(idx)
+        else:
+            name = "./records/output_{}m.wav"\
+                    .format(idx)
         if platform.system() == "Linux":
             cmdffmpeg_L = "ffmpeg -i {} -ac 1 -f wav {}"\
                         .format(path, name)
             os.system(cmdffmpeg_L)
         elif platform.system() == "Windows":
             cmdffmpeg_W = "./ffmpeg/bin/ffmpeg -i {} -ac 1 -f wav {}"\
+                        .format(path, name)
+            sp.call(cmdffmpeg_W)
+        return name
+    
+    def resampling(self, path):
+        idx = 0
+        for s in path:
+            if s.isdigit() == True:
+                idx = s
+                break
+        name = "./records/sample_{}ms.wav"\
+                .format(idx)
+        if platform.system() == "Linux":
+            cmdffmpeg_L = "ffmpeg -i {} -ar 16000 -f wav {}"\
+                        .format(path, name)
+            os.system(cmdffmpeg_L)
+        elif platform.system() == "Windows":
+            cmdffmpeg_W = "./ffmpeg/bin/ffmpeg -i {} -ar 16000 -f wav {}"\
                         .format(path, name)
             sp.call(cmdffmpeg_W)
         return name

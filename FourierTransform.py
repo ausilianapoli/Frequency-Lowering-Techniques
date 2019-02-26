@@ -20,10 +20,10 @@ class FourierTransform:
         freqs = fftfreq(shape, 1./entry[1])
         #print("freqs: ", freqs)
         #print("freq 4000: ", freqs[4000])
-        t = (fftabs, freqs)
+        t = (fftabs, freqs, datafft)
         self.audio_fft.append(t)
         
     def frequency_to_time(self, entry): #input: transformate file
-        signal = ifft(entry[0])
+        signal = ifft(entry[2])
         t = (signal)
         self.audio_ifft.append(t)
