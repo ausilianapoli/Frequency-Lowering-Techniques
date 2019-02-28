@@ -63,7 +63,7 @@ class FrequencyCompression:
         t = (n_fftabs, n_freqs, n_fftdata)
         self.audio_fc.append(t)
         
-    def technique_4A (self, entry):
+    def technique_4A (self, entry): #invariant!!!
         indexCO = self.indexCutoff(entry)
         fftabs, freqs, fftdata = entry
         f_in_max = self.samplerate/2
@@ -80,7 +80,7 @@ class FrequencyCompression:
             data_to_comprime[(i-n_size)%n_size] += (data_to_comprime[i]/self.CR)
         print("fftdata.shape: ", fftdata.shape)
         print("data_to_comprimre.shape: ", data_to_comprime.shape)
-        n_fftdata = np.append(fftdata[f_out_max:], data_to_comprime)
+        n_fftdata = np.append(fftdata[:f_out_max], data_to_comprime)
         n_size = f_out_max + data_to_comprime.size
         n_freqs = freqs[:n_size]
         n_fftabs = abs(n_fftdata[:n_size])
@@ -106,13 +106,30 @@ class FrequencyCompression:
         print("fftdata.shape: ", fftdata.shape)
         print("data_to_comprimre.shape: ", data_to_comprime.shape)
         n_fftdata = np.vstack((fftdata[f_out_max:], data_to_comprime))
-        n_size = f_out_max + data_to_comprime.size
+        n_size = n_fftdata.shape[1]
         n_freqs = freqs[:n_size]
         n_fftabs = abs(n_fftdata[:n_size])
         print("n_fftdata.shape: ", n_fftdata.shape)
         t = (n_fftabs, n_freqs, n_fftdata)
         self.audio_fc.append(t)
 
+    def technique_5 (self, entry):
+        indexCO = self.indexCutoff(entry)
+        fftabs, freqs, fftdata = entry
+        f_in_max = self.samplerate/2
+        f_in = f_in_max ** self.ratio #it is an index
+        f_co = indexCO ** (1-self.ratio) #it is an index
+        f_out_max = int(f_in * f_co)
+        data_to_comprime = fftdata[f_out_max:]
+        n_size = int(data_to_comprime.size/self.CR)
+        for i in range(n_size, data_to_comprime.size):
+            data_to_comprime[(i-n_size)%n_size] += (data_to_comprime[i])
+        n_fftdata = np.append(fftdata[f_out_max:], data_to_comprime[n_size:])
+        n_size = n_fftdata.size
+        n_freqs = freqs[n_size:]
+        n_fftabs = fftabs[n_size:]
+        t = (n_fftabs, n_freqs, n_fftdata)
+        self.audio_fc.append(t)
         
             
  
