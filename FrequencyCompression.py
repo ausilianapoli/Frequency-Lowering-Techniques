@@ -170,6 +170,7 @@ class FrequencyCompression:
         difference = f_out_max - indexCO
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
+            fftabs[indexCO - difference +i] += fftabs[i]
         for i in range(f_out_max + 1, fftdata.size):
             fftdata[i] = 0
             fftabs[i] = 0
@@ -183,17 +184,42 @@ class FrequencyCompression:
         difference = f_out_max - indexCO
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
+            fftabs[indexCO - difference + i] += fftabs[i]
         f_out_max_spec = freqs.size - f_out_max
         indexCO_spec = freqs.size - indexCO
         difference_spec = indexCO_spec - f_out_max_spec
         for i in range(f_out_max_spec, indexCO_spec+1):
             fftdata[indexCO_spec + difference_spec +i] += fftdata[i]
+            fftabs[indexCO_spec + difference_spec +i] += fftabs[i]
         for i in range(f_out_max+1, f_out_max_spec):
             fftdata[i] = 0
             fftabs[i] = 0
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-            
+        
+    def technique_7 (self, entry):
+        fftabs, freqs, fftdata = entry
+        f_out_max = self.indexFOutMax(entry)
+        indexCO = self.indexCutoff(entry)
+        difference = f_out_max - indexCO
+        i = 0
+        for j in range(f_out_max+1, int(freqs.size/2) +1):
+            fftdata[indexCO + i] += fftdata[j]
+            fftabs[indexCO + i] += fftabs[j]
+            i = (i+1)%difference
+        f_out_max_spec = freqs.size - f_out_max
+        indexCO_spec = freqs.size - indexCO
+        difference_spec = indexCO_spec - f_out_max_spec
+        i = 0
+        for j in range(int(freqs.size/2), f_out_max_spec):
+            fftdata[f_out_max_spec + i] += fftdata[j]
+            fftabs[f_out_max_spec + i] += fftdata[j]
+            i = (i+1)%difference_spec
+        for i in range(f_out_max+1, f_out_max_spec):
+            fftdata[i] = 0
+            fftabs[i] = 0
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
  
         
             
