@@ -16,7 +16,7 @@ def test_AudioManaging_1(first=1): #first=1 for initial operations on input; fir
         for i in range (1, 5):
             path = a.join_audio_channels("records/sample_{:d}n.wav"\
                         .format(i))
-            #path = a.resampling(path)
+            path = a.resampling(path)
             a.read_file(path)
         for i in range(0, 4):
             entry = a.audio_file[i]
@@ -62,7 +62,7 @@ def test_Graphs_2(list_file_out): #for output
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
-        fc.example_2(list_fft[i])
+        fc.technique_6A(list_fft[i])
     return fc.audio_fc
     
 #---- MAIN ----
@@ -70,7 +70,7 @@ def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
 cutoff = 4000
 ratio = 0.5
 CR = 2
-samplerate = 44100
+samplerate = 16000
 
 list_file = test_AudioManaging_1()
 list_fft = test_FourierTransform_1(list_file)

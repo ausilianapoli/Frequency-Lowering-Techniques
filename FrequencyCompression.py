@@ -163,6 +163,18 @@ class FrequencyCompression:
         t =(fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
+    def technique_6A (self, entry):
+        fftabs, freqs, fftdata = entry
+        f_out_max = self.indexFOutMax(entry)
+        indexCO = self.indexCutoff(entry)
+        difference = f_out_max - indexCO
+        for i in range(indexCO, f_out_max+1):
+            fftdata[indexCO - difference + i] += fftdata[i]
+        for i in range(f_out_max + 1, fftdata.size):
+            fftdata[i] = 0
+            fftabs[i] = 0
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
             
  
         
