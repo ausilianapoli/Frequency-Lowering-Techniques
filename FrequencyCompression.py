@@ -23,6 +23,19 @@ class FrequencyCompression:
         #print("index -> ", index)
         return int(index)
     
+    def indexFOutMax (self, entry):
+        indexCO = self.indexCutoff(entry)
+        f_in_max = self.samplerate/2
+        f_in = f_in_max ** self.ratio
+        f_co = indexCO ** (1 - self.ratio)
+        f_out_max = int(f_in * f_co)
+        #print("indexCO -> ", indexCO)
+        #print("f_in_max -> ", f_in_max)
+        #print("f_in -> ", f_in)
+        #print("f_co -> ", f_co)
+        #print("f_out_max -> ", f_out_max)
+        return f_out_max
+        
     def technique_1 (self, entry):
       indexCO = self.indexCutoff(entry)
       i = indexCO
@@ -132,12 +145,8 @@ class FrequencyCompression:
         self.audio_fc.append(t)
         
     def example_1 (self, entry):
-        indexCO = self.indexCutoff(entry)
         fftabs, freqs, fftdata = entry
-        f_in_max = self.samplerate/2
-        f_in = f_in_max ** self.ratio
-        f_co = indexCO ** (1 - self.ratio)
-        f_out_max = int(f_in * f_co)
+        f_out_max = self.indexFOutMax(entry)
         for i in range(f_out_max+1, fftdata.size):
             fftdata[i] = 0
             fftabs[i] = 0
@@ -145,12 +154,8 @@ class FrequencyCompression:
         self.audio_fc.append(t)
         
     def example_2 (self, entry):
-        indexCO = self.indexCutoff(entry)
         fftabs, freqs, fftdata = entry
-        f_in_max = self.samplerate/2
-        f_in = f_in_max ** self.ratio
-        f_co = indexCO ** (1 - self.ratio)
-        f_out_max = int(f_in * f_co)
+        f_out_max = self.indexFOutMax(entry)
         f_out_max_spec = freqs.size - f_out_max
         for i in range (f_out_max+1, f_out_max_spec):
             fftdata[i] = 0
