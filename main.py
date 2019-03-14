@@ -14,7 +14,7 @@ def test_AudioManaging_1(first=1): #first=1 for initial operations on input; fir
     a = AudioManaging()
     if first == 1:
         for i in range (1, 5):
-            path = a.join_audio_channels("records/sample_{:d}n.wav"\
+            path = a.join_audio_channels("./records/sample_{:d}n.wav"\
                         .format(i))
             path = a.resampling(path)
             a.read_file(path)
@@ -23,7 +23,7 @@ def test_AudioManaging_1(first=1): #first=1 for initial operations on input; fir
             a.print_metadata(entry)
     else:
        for i in range (1, 5):
-           path = a.join_audio_channels("records/output_{:d}.wav"\
+           path = a.join_audio_channels("./records/output_{:d}.wav"\
                         .format(i), 1)
            a.read_file(path) 
     return a.audio_file
