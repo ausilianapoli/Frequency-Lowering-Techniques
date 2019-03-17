@@ -62,7 +62,7 @@ def test_Graphs_2(list_file_out): #for output
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
-        fc.technique_7(list_fft[i])
+        fc.technique_2(list_fft[i])
     return fc.audio_fc
     
 #---- MAIN ----

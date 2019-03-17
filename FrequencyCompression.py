@@ -54,7 +54,7 @@ class FrequencyCompression:
         t =(fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_6A (self, entry):
+    def technique_1A (self, entry):
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
@@ -68,7 +68,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_6B (self, entry):
+    def technique_1B (self, entry):
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
@@ -88,7 +88,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_7 (self, entry):
+    def technique_2 (self, entry):
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
