@@ -5,6 +5,9 @@ Created on Mon Feb 25 17:00:14 2019
 @author: Maria Ausilia Napoli Spatafora
 """
 
+import numpy as np
+import math
+
 class FrequencyCompression:
     
     def __init__ (self, cutoff, ratio, CR, samplerate):
@@ -34,6 +37,24 @@ class FrequencyCompression:
         #print("f_co -> ", f_co)
         #print("f_out_max -> ", f_out_max)
         return f_out_max
+    
+    def stretching (self, fftdata, fftabs):
+        maximum_data = np.max(fftdata)
+        minimum_data = np.min(fftdata)
+        if (minimum_data < 0): minimum_data *= (-1)
+        maximum_abs = np.max(fftabs)
+        minimum_abs = np.min(fftabs)
+        normalization_factor_pos = ((2**16)/2)-1
+        for i in range(len(fftdata)):
+            negative = 0
+            if(fftdata[i] < 0):
+                fftdata[i] *= (-1)
+                negative = 1
+            fftdata[i] = ((fftdata[i] - minimum_data)/(maximum_data - minimum_data))*normalization_factor_pos
+            if(negative == 1):
+                fftdata[i] *= (-1)
+            fftabs[i] = ((fftabs[i] - minimum_abs)/(maximum_abs - minimum_abs))*normalization_factor_pos
+        return fftdata, fftabs
         
     def example_1 (self, entry):
         fftabs, freqs, fftdata = entry
@@ -109,6 +130,7 @@ class FrequencyCompression:
         for i in range(f_out_max+1, f_out_max_spec):
             fftdata[i] = 0
             fftabs[i] = 0
+        fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
  
