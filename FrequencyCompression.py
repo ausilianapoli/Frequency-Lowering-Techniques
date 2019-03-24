@@ -44,16 +44,16 @@ class FrequencyCompression:
         if (minimum_data < 0): minimum_data *= (-1)
         maximum_abs = np.max(fftabs)
         minimum_abs = np.min(fftabs)
-        normalization_factor_pos = ((2**16)/2)-1
+        normalization_factor = ((2**16)/2)-1
         for i in range(len(fftdata)):
             negative = 0
             if(fftdata[i] < 0):
                 fftdata[i] *= (-1)
                 negative = 1
-            fftdata[i] = ((fftdata[i] - minimum_data)/(maximum_data - minimum_data))*normalization_factor_pos
+            fftdata[i] = ((fftdata[i] - minimum_data)/(maximum_data - minimum_data))*normalization_factor
             if(negative == 1):
                 fftdata[i] *= (-1)
-            fftabs[i] = ((fftabs[i] - minimum_abs)/(maximum_abs - minimum_abs))*normalization_factor_pos
+            fftabs[i] = ((fftabs[i] - minimum_abs)/(maximum_abs - minimum_abs))*normalization_factor
         return fftdata, fftabs
         
     def example_1 (self, entry):
@@ -83,9 +83,8 @@ class FrequencyCompression:
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
             fftabs[indexCO - difference +i] += fftabs[i]
-        for i in range(f_out_max + 1, fftdata.size):
-            fftdata[i] = 0
-            fftabs[i] = 0
+        fftdata[f_out_max+1 : fftdata.size] = 0
+        fftabs[f_out_max+1 : fftdata.size] = 0
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
@@ -103,9 +102,8 @@ class FrequencyCompression:
         for i in range(f_out_max_spec, indexCO_spec+1):
             fftdata[indexCO_spec + difference_spec +i] += fftdata[i]
             fftabs[indexCO_spec + difference_spec +i] += fftabs[i]
-        for i in range(f_out_max+1, f_out_max_spec):
-            fftdata[i] = 0
-            fftabs[i] = 0
+        fftdata[f_out_max+1 : f_out_max_spec] = 0
+        fftabs[f_out_max+1 : f_out_max_spec] = 0
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
@@ -127,10 +125,9 @@ class FrequencyCompression:
             fftdata[f_out_max_spec + i] += fftdata[j]
             fftabs[f_out_max_spec + i] += fftdata[j]
             i = (i+1)%difference_spec
-        for i in range(f_out_max+1, f_out_max_spec):
-            fftdata[i] = 0
-            fftabs[i] = 0
-        fftdata, fftabs = self.stretching(fftdata, fftabs)
+        fftdata[f_out_max+1 : f_out_max_spec] = 0
+        fftabs[f_out_max+1 : f_out_max_spec] = 0
+        #fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
  
