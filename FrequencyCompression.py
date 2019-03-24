@@ -41,18 +41,15 @@ class FrequencyCompression:
     def stretching (self, fftdata, fftabs):
         maximum_data = np.max(fftdata)
         minimum_data = np.min(fftdata)
-        if (minimum_data < 0): minimum_data *= (-1)
         maximum_abs = np.max(fftabs)
         minimum_abs = np.min(fftabs)
-        normalization_factor = ((2**16)/2)-1
+        normalization_factor = ((2**16))-1
+        print("maximum_data: ", maximum_data)
+        print("minimum_data: ", minimum_data)
+        print("maximum_abs: ", maximum_abs)
+        print("minimum_abs: ", minimum_abs)
         for i in range(len(fftdata)):
-            negative = 0
-            if(fftdata[i] < 0):
-                fftdata[i] *= (-1)
-                negative = 1
             fftdata[i] = ((fftdata[i] - minimum_data)/(maximum_data - minimum_data))*normalization_factor
-            if(negative == 1):
-                fftdata[i] *= (-1)
             fftabs[i] = ((fftabs[i] - minimum_abs)/(maximum_abs - minimum_abs))*normalization_factor
         return fftdata, fftabs
         
@@ -127,7 +124,7 @@ class FrequencyCompression:
             i = (i+1)%difference_spec
         fftdata[f_out_max+1 : f_out_max_spec] = 0
         fftabs[f_out_max+1 : f_out_max_spec] = 0
-        #fftdata, fftabs = self.stretching(fftdata, fftabs)
+        fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
  
