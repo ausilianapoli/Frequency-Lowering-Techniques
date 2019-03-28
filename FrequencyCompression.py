@@ -41,16 +41,14 @@ class FrequencyCompression:
     def stretching (self, fftdata, fftabs):
         maximum_data = np.max(fftdata)
         minimum_data = np.min(fftdata)
-        maximum_abs = np.max(fftabs)
-        minimum_abs = np.min(fftabs)
-        normalization_factor = ((2**16))-1
-        print("maximum_data: ", maximum_data)
-        print("minimum_data: ", minimum_data)
-        print("maximum_abs: ", maximum_abs)
-        print("minimum_abs: ", minimum_abs)
+        maximum = ((2**16))-1
+        minimum = (2**16)*(-1)
+        values = np.asarray(minimum/minimum_data, maximum/maximum_data)
+        normalization_factor = np.max(values)
+        #print("maximum_data: ", maximum_data)
+        #print("minimum_data: ", minimum_data)
         for i in range(len(fftdata)):
-            fftdata[i] = ((fftdata[i] - minimum_data)/(maximum_data - minimum_data))*normalization_factor
-            fftabs[i] = ((fftabs[i] - minimum_abs)/(maximum_abs - minimum_abs))*normalization_factor
+            fftdata[i] = fftdata[i]*normalization_factor
         return fftdata, fftabs
         
     def example_1 (self, entry):
@@ -72,7 +70,7 @@ class FrequencyCompression:
         t =(fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_1A (self, entry):
+    def technique_1A (self, entry): #compression
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
@@ -85,7 +83,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_1B (self, entry):
+    def technique_1B (self, entry): #compression
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
@@ -104,7 +102,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_2 (self, entry):
+    def technique_2 (self, entry): #compression
         fftabs, freqs, fftdata = entry
         f_out_max = self.indexFOutMax(entry)
         indexCO = self.indexCutoff(entry)
