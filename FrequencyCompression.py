@@ -125,6 +125,22 @@ class FrequencyCompression:
         fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
- 
+        
+    def technique_a (self, entry): #transposition
+        fftabs, freqs, fftdata = entry
+        indexCO = self.indexCutoff(entry)
+        difference = int(freqs.size/2) - indexCO
+        for i in range(indexCO, int(freqs.size/2)+1):
+            fftdata[indexCO - difference + i] += fftdata[i]
+            fftabs[indexCO - difference + i] += fftabs[i]
+        indexCO_spec = freqs.size - indexCO
+        difference_spec = indexCO_spec - int(freqs.size/2)
+        for i in range(difference_spec):
+            fftdata[indexCO_spec + i] += fftdata[int(freqs.size/2)+1 + i]
+            fftabs[indexCO_spec + i] += fftabs[int(freqs.size/2)+1 + i]
+        fftdata[indexCO : indexCO_spec] = 0
+        fftabs[indexCO : indexCO_spec] = 0
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
         
             
