@@ -60,11 +60,11 @@ class AudioManaging:
             name = "./records/output_{}m.wav"\
                     .format(idx)
         if platform.system() == "Linux":
-            cmdffmpeg_L = "ffmpeg -i {} -ac 1 -f wav {}"\
+            cmdffmpeg_L = "ffmpeg -y -i {} -ac 1 -f wav {}"\
                         .format(path, name)
             os.system(cmdffmpeg_L)
         elif platform.system() == "Windows":
-            cmdffmpeg_W = "./ffmpeg/bin/ffmpeg -i {} -ac 1 -f wav {}"\
+            cmdffmpeg_W = "./ffmpeg/bin/ffmpeg -y -i {} -ac 1 -f wav {}"\
                         .format(path, name)
             sp.call(cmdffmpeg_W)
         return name
