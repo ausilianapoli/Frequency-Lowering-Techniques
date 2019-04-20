@@ -39,16 +39,17 @@ class FrequencyCompression:
         return f_out_max
     
     def stretching (self, fftdata, fftabs):
-        maximum_data = np.max(fftdata)
-        minimum_data = np.min(fftdata)
+        maximum_data = np.max(fftabs)
+        print("maximum_data: ", maximum_data)
+        #minimum_data = np.min(fftdata)
         maximum = ((2**16))-1
-        minimum = (2**16)*(-1)
-        values = np.asarray(minimum/minimum_data, maximum/maximum_data)
-        normalization_factor = np.max(values)
+        #minimum = (2**16)*(-1)
+        normalization_factor = maximum/maximum_data
         #print("maximum_data: ", maximum_data)
         #print("minimum_data: ", minimum_data)
         for i in range(len(fftdata)):
-            fftdata[i] = fftdata[i]*normalization_factor
+            fftdata[i] *= normalization_factor
+            fftabs[i] *= normalization_factor
         return fftdata, fftabs
         
     def example_1 (self, entry):
