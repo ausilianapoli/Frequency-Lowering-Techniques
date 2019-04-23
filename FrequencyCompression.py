@@ -7,6 +7,7 @@ Created on Mon Feb 25 17:00:14 2019
 
 import numpy as np
 from scipy import signal
+from matplotlib import pyplot as plt
 
 class FrequencyCompression:
     
@@ -66,6 +67,13 @@ class FrequencyCompression:
     def lowPassFilter (self):
         f_out_max = self.fOutMax()
         b, a = signal.butter(3, f_out_max/(self.samplerate/2), btype = "low", analog = "False", output = "ba")
+        w, h = signal.freqz(b, a)
+        plt.plot(0.5*self.samplerate*w/np.pi, np.abs(h), "b")
+        plt.axvline(f_out_max, color = "k")
+        plt.xlim(0, 0.5*self.samplerate)
+        plt.title("Lowpass Filter Frequency Response")
+        plt.xlabel('Frequency [Hz]')
+        plt.grid()
         return b, a #b=denominator coeff; a=numerator coeff
         
     def example_1 (self, entry):
