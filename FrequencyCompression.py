@@ -52,7 +52,7 @@ class FrequencyCompression:
             fftabs[i] *= normalization_factor
         return fftdata, fftabs
     
-    def low_pass_filter (self):
+    def lowPassFilter (self):
         b, a = signal.butter(3, self.cutoff/(self.samplerate/2), btype = "low", analog = "False", output = "ba")
         return b, a #b=denominator coeff; a=numerator coeff
         
@@ -125,7 +125,7 @@ class FrequencyCompression:
             fftdata[f_out_max_spec + i] += fftdata[j]
             fftabs[f_out_max_spec + i] += fftdata[j]
             i = (i+1)%difference_spec
-        b, a = self.low_pass_filter() #b=denominator coeff; a=numerator coeff
+        b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
         fftdata = signal.lfilter(b, a, fftdata)
         fftabs = signal.lfilter(b, a, fftabs)
         #fftdata[f_out_max+1 : f_out_max_spec] = 0
