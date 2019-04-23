@@ -17,16 +17,16 @@ class FrequencyCompression:
         self.CR = CR
         self.audio_fc = []
                
-    def indexCutoff (self, entry_fft):
+    def indexFrequency (self, entry_fft, frequency):
         fftabs, freqs, fft = entry_fft
-        index = (self.cutoff/self.samplerate)*freqs.size
+        index = (frequency/self.samplerate)*freqs.size
         #print("self.cutoff/self.samplerate -> ", self.cutoff/self.samplerate)
         #print("freqs.size -> ", freqs.size)
         #print("index -> ", index)
         return int(index)
     
     def indexFOutMax (self, entry):
-        indexCO = self.indexCutoff(entry)
+        indexCO = self.indexFrequency(entry)
         f_in_max = self.samplerate/2
         f_in = f_in_max ** self.ratio
         f_co = indexCO ** (1 - self.ratio)
@@ -38,27 +38,40 @@ class FrequencyCompression:
         #print("f_out_max -> ", f_out_max)
         return f_out_max
     
+    def fOutMax (self):
+        f_in_max = self.samplerate/2
+        f_in = f_in_max ** self.ratio
+        f_co = self.cutoff ** (1 - self.ratio)
+        f_out_max = int(f_in * f_co)
+        return f_out_max
+    
+    def compareFOutMax (self, entry):
+        index = self.indexFOutMax(entry)
+        freq = self.fOutMax()
+        index_freq = (freq/self.samplerate)*entry[1].size
+        print("index: ", index)
+        print("index_freq: ", index_freq)
+        print(index == index_freq)
+    
     def stretching (self, fftdata, fftabs):
         maximum_data = np.max(fftabs)
-        print("maximum_data: ", maximum_data)
-        #minimum_data = np.min(fftdata)
-        maximum = ((2**16))-1
-        #minimum = (2**16)*(-1)
-        normalization_factor = maximum/maximum_data
         #print("maximum_data: ", maximum_data)
-        #print("minimum_data: ", minimum_data)
+        maximum = ((2**16))-1
+        normalization_factor = maximum/maximum_data
         for i in range(len(fftdata)):
             fftdata[i] *= normalization_factor
             fftabs[i] *= normalization_factor
         return fftdata, fftabs
     
     def lowPassFilter (self):
-        b, a = signal.butter(3, self.cutoff/(self.samplerate/2), btype = "low", analog = "False", output = "ba")
+        f_out_max = self.fOutMax()
+        b, a = signal.butter(3, f_out_max/(self.samplerate/2), btype = "low", analog = "False", output = "ba")
         return b, a #b=denominator coeff; a=numerator coeff
         
     def example_1 (self, entry):
         fftabs, freqs, fftdata = entry
-        f_out_max = self.indexFOutMax(entry)
+        f_out_max = self.fOutMax()
+        f_out_max = self.indexFrequency(entry, f_out_max)
         for i in range(f_out_max+1, fftdata.size):
             fftdata[i] = 0
             fftabs[i] = 0
@@ -67,7 +80,8 @@ class FrequencyCompression:
         
     def example_2 (self, entry):
         fftabs, freqs, fftdata = entry
-        f_out_max = self.indexFOutMax(entry)
+        f_out_max = self.fOutMax()
+        f_out_max = self.indexFrequency(entry, f_out_max)
         f_out_max_spec = freqs.size - f_out_max
         for i in range (f_out_max+1, f_out_max_spec):
             fftdata[i] = 0
@@ -77,8 +91,9 @@ class FrequencyCompression:
         
     def technique_1A (self, entry): #compression
         fftabs, freqs, fftdata = entry
-        f_out_max = self.indexFOutMax(entry)
-        indexCO = self.indexCutoff(entry)
+        f_out_max = self.fOutMax()
+        f_out_max = self.indexFrequency(entry, f_out_max)
+        indexCO = self.indexFrequency(entry, self.cutoff)
         difference = f_out_max - indexCO
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
@@ -90,8 +105,9 @@ class FrequencyCompression:
         
     def technique_1B (self, entry): #compression
         fftabs, freqs, fftdata = entry
-        f_out_max = self.indexFOutMax(entry)
-        indexCO = self.indexCutoff(entry)
+        f_out_max = self.fOutMax()
+        f_out_max = self.indexFrequency(entry, f_out_max)
+        indexCO = self.indexFrequency(entry, self.cutoff)
         difference = f_out_max - indexCO
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
@@ -109,8 +125,9 @@ class FrequencyCompression:
         
     def technique_2 (self, entry): #compression
         fftabs, freqs, fftdata = entry
-        f_out_max = self.indexFOutMax(entry)
-        indexCO = self.indexCutoff(entry)
+        f_out_max = self.fOutMax()
+        f_out_max = self.indexFrequency(entry, f_out_max)
+        indexCO = self.indexFrequency(entry, self.cutoff)
         difference = f_out_max - indexCO
         i = 0
         for j in range(f_out_max+1, int(freqs.size/2) +1):
@@ -136,7 +153,7 @@ class FrequencyCompression:
         
     def technique_a (self, entry): #transposition
         fftabs, freqs, fftdata = entry
-        indexCO = self.indexCutoff(entry)
+        indexCO = self.indexFrequency(entry, self.cutoff)
         difference = int(freqs.size/2) - indexCO
         for i in range(indexCO, int(freqs.size/2)+1):
             fftdata[indexCO - difference + i] += fftdata[i]
