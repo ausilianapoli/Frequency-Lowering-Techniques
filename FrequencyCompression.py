@@ -98,8 +98,14 @@ class FrequencyCompression:
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
             fftabs[indexCO - difference +i] += fftabs[i]
+        #Butterworth filter
+        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
+        #fftdata = signal.lfilter(b, a, fftdata)
+        #fftabs = signal.lfilter(b, a, fftabs)
+        #Ideal filter
         fftdata[f_out_max+1 : fftdata.size] = 0
         fftabs[f_out_max+1 : fftdata.size] = 0
+        fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
@@ -116,10 +122,16 @@ class FrequencyCompression:
         indexCO_spec = freqs.size - indexCO
         difference_spec = indexCO_spec - f_out_max_spec
         for i in range(f_out_max_spec, indexCO_spec+1):
-            fftdata[indexCO_spec + difference_spec +i] += fftdata[i]
-            fftabs[indexCO_spec + difference_spec +i] += fftabs[i]
-        fftdata[f_out_max+1 : f_out_max_spec] = 0
-        fftabs[f_out_max+1 : f_out_max_spec] = 0
+            fftdata[indexCO_spec + difference_spec - i] += fftdata[i]
+            fftabs[indexCO_spec + difference_spec - i] += fftabs[i]
+        #Butterworth filter
+        b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
+        fftdata = signal.lfilter(b, a, fftdata)
+        fftabs = signal.lfilter(b, a, fftabs)
+        #Ideal filter
+        #fftdata[f_out_max+1 : f_out_max_spec] = 0
+        #fftabs[f_out_max+1 : f_out_max_spec] = 0
+        #fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
@@ -142,12 +154,14 @@ class FrequencyCompression:
             fftdata[f_out_max_spec + i] += fftdata[j]
             fftabs[f_out_max_spec + i] += fftdata[j]
             i = (i+1)%difference_spec
+        #Butterworth filter
         b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
         fftdata = signal.lfilter(b, a, fftdata)
         fftabs = signal.lfilter(b, a, fftabs)
+        #Ideal filter
         #fftdata[f_out_max+1 : f_out_max_spec] = 0
         #fftabs[f_out_max+1 : f_out_max_spec] = 0
-        fftdata, fftabs = self.stretching(fftdata, fftabs)
+        #fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
@@ -163,8 +177,14 @@ class FrequencyCompression:
         for i in range(difference_spec):
             fftdata[indexCO_spec + i] += fftdata[int(freqs.size/2)+1 + i]
             fftabs[indexCO_spec + i] += fftabs[int(freqs.size/2)+1 + i]
-        fftdata[indexCO : indexCO_spec] = 0
-        fftabs[indexCO : indexCO_spec] = 0
+        #Butterworth filter
+        b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
+        fftdata = signal.lfilter(b, a, fftdata)
+        fftabs = signal.lfilter(b, a, fftabs)
+        #Ideal filter
+        #fftdata[indexCO : indexCO_spec] = 0
+        #fftabs[indexCO : indexCO_spec] = 0
+        #fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
