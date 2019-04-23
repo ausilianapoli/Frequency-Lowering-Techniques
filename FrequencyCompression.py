@@ -6,6 +6,7 @@ Created on Mon Feb 25 17:00:14 2019
 """
 
 import numpy as np
+from scipy import signal
 
 class FrequencyCompression:
     
@@ -50,6 +51,10 @@ class FrequencyCompression:
             fftdata[i] *= normalization_factor
             fftabs[i] *= normalization_factor
         return fftdata, fftabs
+    
+    def low_pass_filter (self):
+        b, a = signal.butter(3, self.cutoff/(self.samplerate/2), btype = "low", analog = "False", output = "ba")
+        return b, a #b=denominator coeff; a=numerator coeff
         
     def example_1 (self, entry):
         fftabs, freqs, fftdata = entry
@@ -120,8 +125,11 @@ class FrequencyCompression:
             fftdata[f_out_max_spec + i] += fftdata[j]
             fftabs[f_out_max_spec + i] += fftdata[j]
             i = (i+1)%difference_spec
-        fftdata[f_out_max+1 : f_out_max_spec] = 0
-        fftabs[f_out_max+1 : f_out_max_spec] = 0
+        b, a = self.low_pass_filter() #b=denominator coeff; a=numerator coeff
+        fftdata = signal.lfilter(b, a, fftdata)
+        fftabs = signal.lfilter(b, a, fftabs)
+        #fftdata[f_out_max+1 : f_out_max_spec] = 0
+        #fftabs[f_out_max+1 : f_out_max_spec] = 0
         fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
