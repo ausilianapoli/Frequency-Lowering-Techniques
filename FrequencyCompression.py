@@ -6,7 +6,6 @@ Created on Mon Feb 25 17:00:14 2019
 """
 
 import numpy as np
-import math
 
 class FrequencyCompression:
     
