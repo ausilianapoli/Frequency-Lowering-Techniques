@@ -14,8 +14,8 @@ cutoff = 4000
 ratio = 0.5
 CR = 2
 samplerate = 44100
-name = "Audio"
-number = 12
+name = "Music" #or "Audio"
+number = 4 #or 12
 am = AudioManaging()
 am_lp = AudioManaging() #low pass
 am_ct = AudioManaging() #compression technique
@@ -39,7 +39,7 @@ for i in range (1, number):
     ft_lp.frequency_to_time(fc_lp.audio_fc[i-1])
 #6a - Save new wav file with low pass filter
     signal = am.convert_numpy(ft_lp.audio_ifft[i-1])
-    am.save_file("testing/Audio{}/{}lp".format(i,name), i, am.audio_file[i-1][1], signal.T)
+    am.save_file("testing/{}{}/{}lp".format(name, i,name), i, am.audio_file[i-1][1], signal.T)
 #3a - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
@@ -48,7 +48,7 @@ for i in range (1, number):
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
     signal = am.convert_numpy(ft_ct.audio_ifft[i-1])
-    am.save_file("testing/Audio{}/{}ct".format(i, name), i, am.audio_file[i-1][1], signal.T)  
+    am.save_file("testing/{}{}/{}ct".format(name, i, name), i, am.audio_file[i-1][1], signal.T)  
 #7 - Print metadata and read new wav files
     #am.print_metadata(path)
     am_lp.read_file("./records/testing/{:s}{:d}/{:s}lp_{:d}.wav"\
