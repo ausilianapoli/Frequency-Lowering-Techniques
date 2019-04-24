@@ -32,7 +32,7 @@ def test_AudioManaging_2(list_ifft, list_file): #last operation on files
     a = AudioManaging()
     for i in range(len(list_ifft)):
         signal = a.convert_numpy(list_ifft[i])
-        a.save_file(i+1, list_file[i][1], signal.T)
+        a.save_file("output", i+1, list_file[i][1], signal.T)
     
 def test_FourierTransform_1(list_file): #from time to frequency space
     f = FourierTransform()

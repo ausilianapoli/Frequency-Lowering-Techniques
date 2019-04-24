@@ -42,9 +42,9 @@ class AudioManaging:
         return signal
     
     #It allows to save processed file audio with wav format
-    def save_file(self, idx, samplerate, signal):
-        wavfile.write("./records/output_{}.wav"\
-                      .format(idx), samplerate, signal)
+    def save_file(self, name, idx, samplerate, signal):
+        wavfile.write("./records/{}_{}.wav"\
+                      .format(name, idx), samplerate, signal)
     
     #It allows to join audio channels to only one
     def join_audio_channels(self, path, out = 0): #out = 1 for join channels of audio output
