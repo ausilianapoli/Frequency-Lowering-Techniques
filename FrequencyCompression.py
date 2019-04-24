@@ -160,7 +160,7 @@ class FrequencyCompression:
         i = 0
         for j in range(int(freqs.size/2), f_out_max_spec):
             fftdata[f_out_max_spec + i] += fftdata[j]
-            fftabs[f_out_max_spec + i] += fftdata[j]
+            fftabs[f_out_max_spec + i] += fftabs[j]
             i = (i+1)%difference_spec
         #Butterworth filter
         b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
