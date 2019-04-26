@@ -9,8 +9,9 @@ from scipy.fftpack import fft, fftfreq, ifft
 
 class FourierTransform:
     
-    audio_fft = []
-    audio_ifft = []
+    def __init__(self):    
+        self.audio_fft = []
+        self.audio_ifft = []
     
     def time_to_frequency(self, entry): #input: read file
         datafft = fft(entry[2])
