@@ -56,7 +56,7 @@ class AudioManaging:
         if out == 0:
             name = "./records/sample_{}m.wav"\
                     .format(idx)
-        else:
+        else:#It allows to join audio channels to only one
             name = "./records/output_{}m.wav"\
                     .format(idx)
         if platform.system() == "Linux":
@@ -69,6 +69,7 @@ class AudioManaging:
             sp.call(cmdffmpeg_W)
         return name
     
+    #It allows to resample the audio files with samplerate equals to 16000
     def resampling(self, path):
         idx = 0
         for s in path:
