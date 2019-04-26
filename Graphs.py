@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 class Graphs:
     
+    def __init__(self):
+        pass
+    
     def waveform(self, entry): #input read file
         plt.figure()
         plt.plot(entry[2])
