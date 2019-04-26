@@ -15,6 +15,7 @@ class AudioManaging:
     
     def __init__(self):
         self.audio_file = [] #list of tuple(path, samplerate, data)
+        
     #It allows to read the file audio.wav from path
     def read_file(self, path):
         samplerate, data = wavfile.read(path)
