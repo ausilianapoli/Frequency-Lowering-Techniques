@@ -13,9 +13,8 @@ import platform
 
 class AudioManaging:
     
-    audio_file = [] #list of tuple(path, samplerate, data)
-    #audio_numpy = [] #list of tuple(signal) after ifft
-    
+    def __init__(self):
+        self.audio_file = [] #list of tuple(path, samplerate, data)
     #It allows to read the file audio.wav from path
     def read_file(self, path):
         samplerate, data = wavfile.read(path)
