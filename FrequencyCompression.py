@@ -57,6 +57,18 @@ class FrequencyCompression:
         print("index: ", index)
         print("index_freq: ", index_freq)
         print(index == index_freq)
+        
+    #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
+    def cutoff_activator (self, entry, low_cutoff, high_cutoff):
+        fftabs, freqs, fftdata = entry
+        threshold = self.indexFrequency(entry, 2200)
+        low_content = sum(fftabs[0:threshold])
+        high_content = sum(fftabs[threshold:])
+        ratio = low_content/high_content
+        if ratio > 1: #low > high --> higher cutoff (= minus compression)
+            self.cutoff = high_cutoff
+        else: #high <= low --> lower cutoff (= plus compression)
+            self.cutoff = low_cutoff
    
     #It normalizes the fft values in order to increase their volume
     def stretching (self, fftdata, fftabs):
