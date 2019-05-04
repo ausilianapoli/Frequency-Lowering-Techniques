@@ -55,9 +55,9 @@ def test_Graphs_1(list_file, list_fft): #for input
         
 def test_Graphs_2(list_file_out): #for output
     g = Graphs()
-    for i in range(len(list_file)):
-        g.waveform(list_file[i])
-        g.spectrogram(list_file[i])
+    for i in range(len(list_file_out)):
+        g.waveform(list_file_out[i])
+        g.spectrogram(list_file_out[i])
 
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(cutoff, ratio, CR, samplerate)
