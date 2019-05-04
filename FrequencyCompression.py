@@ -61,7 +61,7 @@ class FrequencyCompression:
         print(index == index_freq)
         
     #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
-    def cutoff_activator (self, entry):
+    def cutoffActivator (self, entry):
         fftabs, freqs, fftdata = entry
         threshold = self.indexFrequency(entry, 2200)
         low_content = sum(fftabs[0:threshold])
@@ -71,6 +71,7 @@ class FrequencyCompression:
             self.cutoff = self.high_cutoff
         else: #high <= low --> lower cutoff (= plus compression)
             self.cutoff = self.low_cutoff
+        print("The activated cutoff frequency is: ", self.cutoff)
    
     #It normalizes the fft values in order to increase their volume
     def stretching (self, fftdata, fftabs):
@@ -100,6 +101,7 @@ class FrequencyCompression:
         
     def example_1 (self, entry):
         fftabs, freqs, fftdata = entry
+        self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
         for i in range(f_out_max+1, fftdata.size):
@@ -110,6 +112,7 @@ class FrequencyCompression:
         
     def example_2 (self, entry):
         fftabs, freqs, fftdata = entry
+        self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
         f_out_max_spec = freqs.size - f_out_max
@@ -121,6 +124,7 @@ class FrequencyCompression:
         
     def technique_1A (self, entry): #compression
         fftabs, freqs, fftdata = entry
+        self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
         indexCO = self.indexFrequency(entry, self.cutoff)
@@ -141,6 +145,7 @@ class FrequencyCompression:
         
     def technique_1B (self, entry): #compression
         fftabs, freqs, fftdata = entry
+        self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
         indexCO = self.indexFrequency(entry, self.cutoff)
@@ -167,6 +172,7 @@ class FrequencyCompression:
         
     def technique_2 (self, entry): #compression
         fftabs, freqs, fftdata = entry
+        self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
         indexCO = self.indexFrequency(entry, self.cutoff)
