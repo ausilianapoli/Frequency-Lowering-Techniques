@@ -69,7 +69,7 @@ class FrequencyCompression:
         ratio = low_content/high_content
         if ratio > 1: #low > high --> higher cutoff (= minus compression)
             self.cutoff = self.high_cutoff
-        else: #high <= low --> lower cutoff (= plus compression)
+        else: #high >= low --> lower cutoff (= plus compression)
             self.cutoff = self.low_cutoff
         print("The activated cutoff frequency is: ", self.cutoff)
    
