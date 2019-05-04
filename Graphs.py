@@ -12,13 +12,15 @@ class Graphs:
     def __init__(self):
         pass
     
+    #It plots the waveform
     def waveform(self, entry): #input read file
         plt.figure()
         plt.plot(entry[2])
         plt.title("Waveform: {}"\
                   .format(entry[0]))
         plt.show()
-        
+    
+    #It plots the frequency spectrum aftet fft    
     def frequency_spectrum(self, entry_fft, entry_file): #input: fft and read audio
         plt.figure()
         plt.xlim([10, entry_file[1]/2.])
@@ -28,7 +30,8 @@ class Graphs:
         plt.title("Frequency Spectrum: {}"\
                   .format(entry_file[0]))
         plt.show()
-        
+
+    #It plots the spectrogram
     def spectrogram(self, entry): #input: read file
         plt.figure()
         plt.specgram(entry[2], Fs = entry[1])
