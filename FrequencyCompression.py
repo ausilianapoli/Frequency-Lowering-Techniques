@@ -11,8 +11,10 @@ from matplotlib import pyplot as plt
 
 class FrequencyCompression:
     
-    def __init__ (self, cutoff, ratio, CR, samplerate):
-        self.cutoff = cutoff
+    def __init__ (self, low_cutoff, high_cutoff, ratio, CR, samplerate):
+        self.low_cutoff = low_cutoff
+        self.high_cutoff = high_cutoff
+        self.cutoff = low_cutoff
         self.ratio = ratio
         self.samplerate = samplerate
         self.CR = CR
@@ -59,16 +61,16 @@ class FrequencyCompression:
         print(index == index_freq)
         
     #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
-    def cutoff_activator (self, entry, low_cutoff, high_cutoff):
+    def cutoff_activator (self, entry):
         fftabs, freqs, fftdata = entry
         threshold = self.indexFrequency(entry, 2200)
         low_content = sum(fftabs[0:threshold])
         high_content = sum(fftabs[threshold:])
         ratio = low_content/high_content
         if ratio > 1: #low > high --> higher cutoff (= minus compression)
-            self.cutoff = high_cutoff
+            self.cutoff = self.high_cutoff
         else: #high <= low --> lower cutoff (= plus compression)
-            self.cutoff = low_cutoff
+            self.cutoff = self.low_cutoff
    
     #It normalizes the fft values in order to increase their volume
     def stretching (self, fftdata, fftabs):
