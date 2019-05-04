@@ -13,6 +13,7 @@ class FourierTransform:
         self.audio_fft = []
         self.audio_ifft = []
     
+    #It allows to convert time domain data into frequency domain data
     def time_to_frequency(self, entry): #input: read file
         datafft = fft(entry[2])
         fftabs = abs(datafft)
@@ -23,7 +24,8 @@ class FourierTransform:
         #print("freq 4000: ", freqs[4000])
         t = (fftabs, freqs, datafft)
         self.audio_fft.append(t)
-        
+     
+    #It allows to convert frequency domain data into time domain data
     def frequency_to_time(self, entry): #input: transformate file
         signal = ifft(entry[2])
         t = (signal)
