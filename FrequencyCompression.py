@@ -72,6 +72,8 @@ class FrequencyCompression:
         else: #high >= low --> lower cutoff (= plus compression)
             self.cutoff = self.low_cutoff
         print("The activated cutoff frequency is: ", self.cutoff)
+        print("Low content is: ", low_content)
+        print("High content is: ", high_content)
    
     #It normalizes the fft values in order to increase their volume
     def stretching (self, fftdata, fftabs):
