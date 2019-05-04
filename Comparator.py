@@ -10,7 +10,8 @@ from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
 
-cutoff = 4000
+low_cutoff = 4000
+high_cutoff = 6000
 ratio = 0.5
 CR = 2
 samplerate = 44100
@@ -22,8 +23,8 @@ am_ct = AudioManaging() #compression technique
 ft_lp = FourierTransform() #low pass
 ft_ct = FourierTransform() #compression technique
 gr = Graphs()
-fc_lp = FrequencyCompression(cutoff, ratio, CR, samplerate) #low pass
-fc_ct = FrequencyCompression(cutoff, ratio, CR, samplerate) #compression technique
+fc_lp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #low pass
+fc_ct = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #compression technique
 
 for i in range (1, number):
 #1 - Take path
