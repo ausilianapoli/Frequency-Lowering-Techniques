@@ -13,16 +13,16 @@ from FrequencyCompression import FrequencyCompression
 def test_AudioManaging_1(first=1): #first=1 for initial operations on input; first=0 for last operation on output
     a = AudioManaging()
     if first == 1:
-        for i in range (1, 5):
+        for i in range (1, 6):
             path = a.join_audio_channels("./records/sample_{:d}n.wav"\
                         .format(i))
             path = a.resampling(path)
             a.read_file(path)
-        for i in range(0, 4):
+        for i in range(0, 5):
             entry = a.audio_file[i]
             a.print_metadata(entry)
     else:
-       for i in range (1, 5):
+       for i in range (1, 6):
            path = a.join_audio_channels("./records/output_{:d}.wav"\
                         .format(i), 1)
            a.read_file(path) 
