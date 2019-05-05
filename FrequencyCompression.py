@@ -63,7 +63,7 @@ class FrequencyCompression:
     #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
     def cutoffActivator (self, entry):
         fftabs, freqs, fftdata = entry
-        threshold = self.indexFrequency(entry, 2200)
+        threshold = self.indexFrequency(entry, 3500)
         low_content = sum(fftabs[0:threshold])
         high_content = sum(fftabs[threshold:])
         ratio = low_content/high_content
