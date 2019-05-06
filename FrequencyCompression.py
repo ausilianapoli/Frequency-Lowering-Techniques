@@ -98,6 +98,38 @@ class FrequencyCompression:
         plt.xlabel('Frequency [Hz]')
         plt.grid()
         return b, a #b=denominator coeff; a=numerator coeff
+    
+    #It creates the list of the indeces of every region for composition techniques
+    def createRegion (self, entry):
+        list_region = []
+        #1 region
+        inf_dst = self.indexFrequency(entry, 1587) #inferior extreme of destination region (lower)
+        sup_dst = self.indexFrequency(entry, 2429) #superior extreme of destination region (lower)
+        inf_src = self.indexFrequency(entry, 3940) #inferior extreme of source region (higher)
+        sup_src = self.indexFrequency(entry, 6985) #superior extreme of source region (higher)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #2 region
+        inf_dst = self.indexFrequency(entry, 1763)
+        sup_dst = self.indexFrequency(entry, 2522)
+        inf_src = self.indexFrequency(entry, 4116)
+        sup_src = self.indexFrequency(entry, 7228)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #3 region
+        inf_dst = self.indexFrequency(entry, 1957)
+        sup_dst = self.indexFrequency(entry, 2790)
+        inf_src = self.indexFrequency(entry, 4310)
+        sup_src = self.indexFrequency(entry, 7496)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #4 region
+        inf_dst = self.indexFrequency(entry, 2169)
+        sup_dst = self.indexFrequency(entry, 3083)
+        inf_src = self.indexFrequency(entry, 4522)
+        sup_src = self.indexFrequency(entry, 7789)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
  
 #Techniques:
         
@@ -225,5 +257,8 @@ class FrequencyCompression:
         #fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
+        
+        
+        
         
             
