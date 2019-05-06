@@ -353,10 +353,10 @@ class FrequencyCompression:
         self.audio_fc.append(t)
         
     def technique_e (self, entry): #composition with cutoff, 8 KHz and narrow destination regions
-        list_region = self.createRegionExtended(entry)
+        list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
-        for i in range (0, 10):
+        for i in range (0, 4):
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             narrow_sup_dst = ((sup_dst - inf_dst)/(cutoff - inf_src))*(sup_src - inf_src) #it's proportion between regions' dimensions
