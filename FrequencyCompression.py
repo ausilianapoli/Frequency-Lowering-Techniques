@@ -130,6 +130,7 @@ class FrequencyCompression:
         sup_src = self.indexFrequency(entry, 7789)
         t = (inf_dst, sup_dst, inf_src, sup_src)
         list_region.append(t)
+        return list_region
  
 #Techniques:
         
@@ -262,7 +263,7 @@ class FrequencyCompression:
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         for i in range (0, 4):
-            inf_dst, sup_dst, inf_src, sup_src = list_region
+            inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
