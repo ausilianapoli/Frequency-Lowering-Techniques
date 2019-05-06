@@ -99,7 +99,7 @@ class FrequencyCompression:
         plt.grid()
         return b, a #b=denominator coeff; a=numerator coeff
     
-    #It creates the list of the indeces of every region for composition techniques
+    #It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
         list_region = []
         #1 region
