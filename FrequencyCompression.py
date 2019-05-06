@@ -97,6 +97,7 @@ class FrequencyCompression:
         plt.title("Lowpass Filter Frequency Response")
         plt.xlabel('Frequency [Hz]')
         plt.grid()
+        plt.show()
         return b, a #b=denominator coeff; a=numerator coeff
     
     #It creates the list of the indeces of every region for composition techniques (minimal region)
