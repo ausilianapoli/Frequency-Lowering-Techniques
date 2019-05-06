@@ -177,6 +177,7 @@ class FrequencyCompression:
         sup_src = self.indexFrequency(entry, 9547)
         t = (inf_dst, sup_dst, inf_src, sup_src)
         list_region.append(t)
+        return list_region
  
 #Techniques:
         
@@ -320,6 +321,20 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
+    def technique_c (self, entry): #composition without cutoff but bandwidth of 10 KHz
+        list_region = self.createRegionExtended(entry)
+        fftabs, freqs, fftdata = entry
+        for i in range (0, 10):
+            inf_dst, sup_dst, inf_src, sup_src = list_region[i]
+            j = inf_dst
+            for k in range (inf_src, sup_src+1):
+                fftabs[j] += fftabs[k]
+                fftdata[j] += fftdata[k]
+                j+=1
+                if j > sup_dst:
+                    j = inf_dst
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
         
         
             
