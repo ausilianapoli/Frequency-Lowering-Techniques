@@ -131,6 +131,52 @@ class FrequencyCompression:
         t = (inf_dst, sup_dst, inf_src, sup_src)
         list_region.append(t)
         return list_region
+    
+    #It creates the list of the indeces of every region for composition techniques until 10KHz
+    def createRegionExtended (self, entry):
+        list_region = self.createRegion(entry)
+        #5 region
+        inf_dst = self.indexFrequency(entry, 2402)
+        sup_dst = self.indexFrequency(entry, 3405)
+        inf_src = self.indexFrequency(entry, 4755)
+        sup_src = self.indexFrequency(entry, 8111)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #6 region
+        inf_dst = self.indexFrequency(entry, 2658)
+        sup_dst = self.indexFrequency(entry, 3758)
+        inf_src = self.indexFrequency(entry, 5011)
+        sup_src = self.indexFrequency(entry, 8664)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #7 region
+        inf_dst = self.indexFrequency(entry, 2938)
+        sup_dst = self.indexFrequency(entry, 4145)
+        inf_src = self.indexFrequency(entry, 5291)
+        sup_src = self.indexFrequency(entry, 8851)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #8 region
+        inf_dst = self.indexFrequency(entry, 3246)
+        sup_dst = self.indexFrequency(entry, 4570)
+        inf_src = self.indexFrequency(entry, 5599)
+        sup_src = self.indexFrequency(entry, 9276)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #9 region
+        inf_dst = self.indexFrequency(entry, 3583)
+        sup_dst = self.indexFrequency(entry, 5036)
+        inf_src = self.indexFrequency(entry, 5806)
+        sup_src = self.indexFrequency(entry, 9480)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
+        #10 region
+        inf_dst = self.indexFrequency(entry, 3954)
+        sup_dst = self.indexFrequency(entry, 5547)
+        inf_src = self.indexFrequency(entry, 5954)
+        sup_src = self.indexFrequency(entry, 9547)
+        t = (inf_dst, sup_dst, inf_src, sup_src)
+        list_region.append(t)
  
 #Techniques:
         
