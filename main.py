@@ -62,7 +62,7 @@ def test_Graphs_2(list_file_out): #for output
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
-        fc.technique_g(list_fft[i])
+        fc.technique_2(list_fft[i])
     return fc.audio_fc
     
 #---- MAIN ----
@@ -71,7 +71,7 @@ low_cutoff = 4000
 high_cutoff = 6000
 ratio = 0.5
 CR = 2
-samplerate = 20000
+samplerate = 16000
 
 list_file = test_AudioManaging_1()
 list_fft = test_FourierTransform_1(list_file)
