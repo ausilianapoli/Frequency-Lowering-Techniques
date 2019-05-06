@@ -262,13 +262,14 @@ class FrequencyCompression:
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         for i in range (0, 4):
-            j = list_region[i][0]
-            for k in range (list_region[i][2], list_region[i][3]):
+            inf_dst, sup_dst, inf_src, sup_src = list_region
+            j = inf_dst
+            for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 j+=1
-                if j > list_region[i][1]:
-                    j = list_region[i][0]
+                if j > sup_dst:
+                    j = inf_dst
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
