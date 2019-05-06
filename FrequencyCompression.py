@@ -337,10 +337,10 @@ class FrequencyCompression:
         self.audio_fc.append(t)
         
     def technique_d (self, entry): #composition with cutoff, 8 KHz and unchanged destination regions
-        list_region = self.createRegionExtended(entry)
+        list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
-        for i in range (0, 10):
+        for i in range (0, 4):
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             for k in range (cutoff, sup_src+1):
