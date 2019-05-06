@@ -258,6 +258,19 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
+    def technique_b (self, entry): #composition without cutoff and limited bandwidth to 8 KHz
+        list_region = self.createRegion(entry)
+        fftabs, freqs, fftdata = entry
+        for i in range (0, 4):
+            j = list_region[i][0]
+            for k in range (list_region[i][2], list_region[i][3]):
+                fftabs[j] += fftabs[k]
+                fftdata[j] += fftdata[k]
+                j+=1
+                if j > list_region[i][1]:
+                    j = list_region[i][0]
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
         
         
         
