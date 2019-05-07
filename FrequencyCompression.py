@@ -280,7 +280,7 @@ class FrequencyCompression:
         #Ideal filter
         #fftdata[f_out_max+1 : f_out_max_spec] = 0
         #fftabs[f_out_max+1 : f_out_max_spec] = 0
-        #fftdata, fftabs = self.stretching(fftdata, fftabs)
+        fftdata, fftabs = self.stretching(fftdata, fftabs)
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
