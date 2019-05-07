@@ -216,14 +216,14 @@ class FrequencyCompression:
             fftdata[indexCO - difference + i] += fftdata[i]
             fftabs[indexCO - difference +i] += fftabs[i]
         #Butterworth filter
-        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        #fftdata = signal.lfilter(b, a, fftdata)
-        #fftabs = signal.lfilter(b, a, fftabs)
+        b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
+        fftdata = signal.lfilter(b, a, fftdata)
+        fftabs = signal.lfilter(b, a, fftabs)
         #Ideal filter
-        fftdata[f_out_max+1 : fftdata.size] = 0
-        fftabs[f_out_max+1 : fftdata.size] = 0
-        fftdata, fftabs = self.stretching(fftdata, fftabs)
-        t = (fftabs, freqs, fftdata)
+        #fftdata[f_out_max+1 : fftdata.size] = 0
+        #fftabs[f_out_max+1 : fftdata.size] = 0
+        #fftdata, fftabs = self.stretching(fftdata, fftabs)
+        #t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
     def technique_1B (self, entry): #compression
