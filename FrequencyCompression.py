@@ -223,7 +223,7 @@ class FrequencyCompression:
         #fftdata[f_out_max+1 : fftdata.size] = 0
         #fftabs[f_out_max+1 : fftdata.size] = 0
         #fftdata, fftabs = self.stretching(fftdata, fftabs)
-        #t = (fftabs, freqs, fftdata)
+        t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
     def technique_1B (self, entry): #compression
