@@ -89,7 +89,7 @@ class FrequencyCompression:
     #It calculates the low pass Butterworth filter and plots it
     def lowPassFilter (self):
         f_out_max = self.fOutMax()
-        b, a = signal.butter(5, f_out_max/(self.samplerate/2), btype = "low")
+        b, a = signal.butter(1, f_out_max/(self.samplerate/2), btype = "low")
         w, h = signal.freqz(b, a)
         plt.plot(0.5*self.samplerate*w/np.pi, np.abs(h), "b")
         plt.axvline(f_out_max, color = "k")
