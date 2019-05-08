@@ -9,6 +9,12 @@ from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
+from scipy import signal as sg
+
+def lowPassFilter (samplerate, cutoff, data):
+    b, a = sg.butter(1, cutoff/(samplerate/2), btype = "low") #b=denominator coeff; a=numerator coeff
+    data = sg.lfilter(b, a, data)
+    return data
 
 low_cutoff = 4000
 high_cutoff = 6000
