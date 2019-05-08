@@ -118,7 +118,23 @@ class FrequencyCompression:
         plt.show()
         return mask
     
-    
+    #It calculates the High Pass Butterworth based on its mathematic formula
+    def butterHPFilter (self, entry):
+        fftabs, freqs, fftdata = entry
+        mask = np.zeros(fftabs.size) #it will be my filter
+        indexCutoff = self.indexFrequency(entry, self.cutoff)
+        n = 1 #order filter
+        for i in range(int(len(mask)/2)):
+            mask[i] = 1/(1 + (indexCutoff/i)**(2*n))
+            mask[len(mask) - 1 - i] =  mask[i]
+        plt.figure()
+        plt.axvline(self.cutoff, color = "k")
+        plt.xlim(0, self.samplerate)
+        plt.title("High Pass Butterworth Order " + str(n) + " Frequency Response")
+        plt.grid()
+        plt.plot(mask)
+        plt.show()
+        return mask
     
     #It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
