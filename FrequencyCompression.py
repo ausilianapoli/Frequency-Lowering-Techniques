@@ -104,7 +104,7 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
         indexCutoff = self.indexFrequency(entry, self.cutoff)
-        n = 3 #order filter
+        n = 1 #order filter
         for i in range(int(len(mask)/2)):
             mask[i] = 1/(1 + (i/indexCutoff)**(2*n))
             mask[len(mask) - 1 - i] =  mask[i]
