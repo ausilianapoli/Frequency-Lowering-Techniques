@@ -100,6 +100,7 @@ class FrequencyCompression:
         plt.show()
         return b, a #b=denominator coeff; a=numerator coeff
     
+    #It calculates the Low Pass Butterworth based on its mathematic formula
     def butterLPFilter (self, entry):
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
@@ -116,6 +117,8 @@ class FrequencyCompression:
         plt.plot(mask)
         plt.show()
         return mask
+    
+    
     
     #It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
