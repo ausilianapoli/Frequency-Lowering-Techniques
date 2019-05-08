@@ -75,7 +75,7 @@ class FrequencyCompression:
         print("Low content is: ", low_content)
         print("High content is: ", high_content)
    
-    #It normalizes the fft values in order to increase their volume
+    #It normalizes the fft values in order to increase their volume - NOT USED
     def stretching (self, fftdata, fftabs):
         maximum_data = np.max(fftabs)
         #print("maximum_data: ", maximum_data)
