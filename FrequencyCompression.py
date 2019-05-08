@@ -86,7 +86,7 @@ class FrequencyCompression:
             fftabs[i] *= normalization_factor
         return fftdata, fftabs
   
-    #It calculates the low pass Butterworth filter and plots it
+    #It calculates the low pass Butterworth filter and plots it - DEPRECATED
     def lowPassFilter (self):
         f_out_max = self.fOutMax()
         b, a = signal.butter(1, f_out_max/(self.samplerate/2), btype = "low")
