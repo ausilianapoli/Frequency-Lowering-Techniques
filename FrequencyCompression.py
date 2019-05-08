@@ -136,6 +136,15 @@ class FrequencyCompression:
         plt.show()
         return mask
     
+    #It applys butterHPFilter simply (it's used in Comparator.py)
+    def applyHPButter(self, entry):
+        fftabs, freqs, fftdata = entry
+        mask = self.butterHPFilter(entry)
+        fftdata *= mask
+        fftabs *= mask
+        t = (fftabs, freqs, fftdata)
+        self.audio_fc.append(t)
+    
     #It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
         list_region = []
