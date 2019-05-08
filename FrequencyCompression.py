@@ -326,13 +326,17 @@ class FrequencyCompression:
             fftdata[indexCO_spec + i] += fftdata[int(freqs.size/2)+1 + i]
             fftabs[indexCO_spec + i] += fftabs[int(freqs.size/2)+1 + i]
         #Butterworth filter
-        b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        fftdata = signal.lfilter(b, a, fftdata)
-        fftabs = signal.lfilter(b, a, fftabs)
+        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
+        #fftdata = signal.lfilter(b, a, fftdata)
+        #fftabs = signal.lfilter(b, a, fftabs)
         #Ideal filter
         #fftdata[indexCO : indexCO_spec] = 0
         #fftabs[indexCO : indexCO_spec] = 0
         #fftdata, fftabs = self.stretching(fftdata, fftabs)
+        #My Butterworth filter
+        mask = self.butterLPFilter(entry)
+        fftdata *= mask
+        fftabs *= mask
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
