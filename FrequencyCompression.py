@@ -118,14 +118,14 @@ class FrequencyCompression:
         plt.show()
         return mask
     
-    #It calculates the High Pass Butterworth based on its mathematic formula (it's used in frequency domain)
+    #It calculates the High Pass Butterworth based on its mathematic formula (it's used in frequency domain) - NOT USED
     def butterHPFilter (self, entry):
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
         indexCutoff = self.indexFrequency(entry, self.cutoff)
         n = 1 #order filter
         for i in range(int(len(mask)/2)):
-            mask[i] = 1/(1 + (indexCutoff/i)**(2*n))
+            mask[i] = 1/(1 + (indexCutoff/i)**(2*n)) #ATTENTION: division by zero! So What?
             mask[len(mask) - 1 - i] =  mask[i]
         plt.figure()
         plt.axvline(self.cutoff, color = "k")
