@@ -100,6 +100,23 @@ class FrequencyCompression:
         plt.show()
         return b, a #b=denominator coeff; a=numerator coeff
     
+    def butterLPFilter (self, entry):
+        fftabs, freqs, fftdata = entry
+        mask = np.zeros(fftabs.size) #it will be my filter
+        indexCutoff = self.indexFrequency(entry, self.cutoff)
+        n = 1 #order filter
+        for i in range(int(len(mask)/2)):
+            mask[i] = 1/(1 + (i/indexCutoff)**(2*n))
+            mask[len(mask) - 1 - i] =  mask[i]
+        plt.figure()
+        plt.axvline(self.cutoff, color = "k")
+        plt.xlim(0, self.samplerate)
+        plt.title("Low Pass Butterworth Order ", n, " Frequency Response")
+        plt.grid()
+        plt.plot(mask)
+        plt.show()
+        return mask
+    
     #It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
         list_region = []
