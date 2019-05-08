@@ -8,6 +8,7 @@ Created on Mon Feb 25 17:00:14 2019
 import numpy as np
 from scipy import signal
 from matplotlib import pyplot as plt
+import math
 
 class FrequencyCompression:
     
@@ -131,6 +132,23 @@ class FrequencyCompression:
         plt.axvline(self.cutoff, color = "k")
         plt.xlim(0, self.samplerate)
         plt.title("High Pass Butterworth Order " + str(n) + " Frequency Response")
+        plt.grid()
+        plt.plot(mask)
+        plt.show()
+        return mask
+    
+    #It calculates the High Pass Gaussian based on its mathematic formula (it's used in frequency domain)
+    def gaussianHPFilter(self, entry):
+        fftabs, freqs, fftdata = entry
+        mask = np.zeros(fftabs.size) #it will be my filter
+        indexCutoff = self.indexFrequency(entry, self.cutoff)
+        for i in range(int(len(mask)/2)):
+            mask[i] = 1 - math.exp(-(i**2)/(2*(indexCutoff**2)))
+            mask[len(mask) - 1 - i] =  mask[i]
+        plt.figure()
+        plt.axvline(self.cutoff, color = "k")
+        plt.xlim(0, self.samplerate)
+        plt.title("High Pass Gaussian Filter Frequency Response")
         plt.grid()
         plt.plot(mask)
         plt.show()
