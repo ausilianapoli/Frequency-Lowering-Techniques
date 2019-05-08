@@ -100,7 +100,7 @@ class FrequencyCompression:
         plt.show()
         return b, a #b=denominator coeff; a=numerator coeff
     
-    #It calculates the Low Pass Butterworth based on its mathematic formula
+    #It calculates the Low Pass Butterworth based on its mathematic formula (it's used in frequency domain)
     def butterLPFilter (self, entry):
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
@@ -118,7 +118,7 @@ class FrequencyCompression:
         plt.show()
         return mask
     
-    #It calculates the High Pass Butterworth based on its mathematic formula
+    #It calculates the High Pass Butterworth based on its mathematic formula (it's used in frequency domain)
     def butterHPFilter (self, entry):
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
