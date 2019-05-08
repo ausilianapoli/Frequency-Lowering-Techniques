@@ -111,7 +111,7 @@ class FrequencyCompression:
         plt.figure()
         plt.axvline(self.cutoff, color = "k")
         plt.xlim(0, self.samplerate)
-        plt.title("Low Pass Butterworth Order ", n, " Frequency Response")
+        plt.title("Low Pass Butterworth Order " + str(n) + " Frequency Response")
         plt.grid()
         plt.plot(mask)
         plt.show()
