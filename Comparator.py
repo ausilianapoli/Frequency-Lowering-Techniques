@@ -27,6 +27,7 @@ am = AudioManaging()
 am_lp = AudioManaging() #low pass
 am_ct = AudioManaging() #compression technique
 am_hp = AudioManaging() #high pass
+am_ctlp = AudioManaging() #before compression technique, after low pass in spatial domain
 ft_lp = FourierTransform() #low pass
 ft_ct = FourierTransform() #compression technique
 ft_hp = FourierTransform() #high pass
@@ -75,11 +76,19 @@ for i in range (1, number):
                         .format(name, i, name, i))
     am_hp.read_file("./records/testing/{:s}{:d}/{:s}hp_{:d}.wav"\
                         .format(name, i, name, i))
-#8 - Plot waveform and spectrogram
+#8 - Apply low pass Butter filter, save and read new wav file
+    _, sr_ct, data_ct = am_ct.audio_file[i-1]
+    data_ct = lowPassFilter(samplerate, 8000, data_ct)
+    am_ctlp.save_file("testing/{}{}/{}ctlp".format(name, i, name), i, sr_ct, data_ct)
+    am_ctlp.read_file("./records/testing/{:s}{:d}/{:s}ctlp_{:d}.wav"\
+                        .format(name, i, name, i))
+#9 - Plot waveform and spectrogram
     gr.waveform(am.audio_file[i-1])
     gr.waveform(am_lp.audio_file[i-1])
     gr.waveform(am_ct.audio_file[i-1])
+    gr.waveform(am_ctlp.audio_file[i-1])
     gr.spectrogram(am.audio_file[i-1])
     gr.spectrogram(am_lp.audio_file[i-1])
     gr.spectrogram(am_ct.audio_file[i-1])
+    gr.spectrogram(am_ctlp.audio_file[i-1])
     
