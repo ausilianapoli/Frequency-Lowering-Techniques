@@ -9,15 +9,11 @@ from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
-from scipy import signal as sg
 
-def lowPassFilter (samplerate, cutoff, data):
-    b, a = sg.butter(1, cutoff/(samplerate/2), btype = "low") #b=denominator coeff; a=numerator coeff
-    data = sg.lfilter(b, a, data)
-    return data
 
 low_cutoff = 4000
 high_cutoff = 6000
+cutoff_lp = 8000 #or 10000
 ratio = 0.5
 CR = 2
 samplerate = 44100
@@ -27,14 +23,16 @@ am = AudioManaging()
 am_lp = AudioManaging() #low pass
 am_ct = AudioManaging() #compression technique
 am_hp = AudioManaging() #high pass
-am_ctlp = AudioManaging() #before compression technique, after low pass in spatial domain
+am_ctlp = AudioManaging() #before compression technique, after low pass
 ft_lp = FourierTransform() #low pass
 ft_ct = FourierTransform() #compression technique
 ft_hp = FourierTransform() #high pass
+ft_ctlp = FourierTransform() #before compression technique, after low pass 
 gr = Graphs()
 fc_lp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #low pass
 fc_ct = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #compression technique
 fc_hp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #high pass
+fc_ctlp = FrequencyCompression(cutoff_lp, cutoff_lp, ratio, CR, samplerate) #before compression technique, after low pass
 
 for i in range (1, number):
 #1 - Take path
@@ -76,10 +74,12 @@ for i in range (1, number):
                         .format(name, i, name, i))
     am_hp.read_file("./records/testing/{:s}{:d}/{:s}hp_{:d}.wav"\
                         .format(name, i, name, i))
-#8 - Apply low pass Butter filter, save and read new wav file
-    _, sr_ct, data_ct = am_ct.audio_file[i-1]
-    data_ct = lowPassFilter(samplerate, 8000, data_ct)
-    am_ctlp.save_file("testing/{}{}/{}ctlp".format(name, i, name), i, sr_ct, data_ct)
+#8 - Apply low pass Butter filter in frequency domain, save and read new wav file
+    ft_ctlp.time_to_frequency(am_ct.audio_file[i-1])
+    fc_ctlp.applyLPButter(ft_ctlp.audio_fft[i-1])
+    ft_ctlp.frequency_to_time(fc_ctlp.audio_fc[i-1])
+    signal = am_ct.convert_numpy(ft_ctlp.audio_ifft[i-1])
+    am_ct.save_file("testing/{}{}/{}ctlp".format(name, i, name), i, am_ct.audio_file[i-1][1], signal)
     am_ctlp.read_file("./records/testing/{:s}{:d}/{:s}ctlp_{:d}.wav"\
                         .format(name, i, name, i))
 #9 - Plot waveform and spectrogram
