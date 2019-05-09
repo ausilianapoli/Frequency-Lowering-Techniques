@@ -13,12 +13,12 @@ from FrequencyCompression import FrequencyCompression
 
 low_cutoff = 4000
 high_cutoff = 6000
-cutoff_lp = 8000 #or 10000
+cutoff_lp = 10000 #or 8000
 ratio = 0.5
 CR = 2
 samplerate = 44100
-name = "Music" #or "Audio"
-number = 4 #or 12
+name = "Audio" #or "Music"
+number = 12 #or 4
 am = AudioManaging()
 am_lp = AudioManaging() #low pass
 am_ct = AudioManaging() #compression technique
