@@ -277,7 +277,7 @@ class FrequencyCompression:
         t =(fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_1A (self, entry): #compression
+    def technique_1A (self, entry): #compression #TH: no 1
         fftabs, freqs, fftdata = entry
         self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
@@ -333,7 +333,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_2 (self, entry): #compression
+    def technique_2 (self, entry): #compression #TH: no 2
         fftabs, freqs, fftdata = entry
         self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
@@ -368,7 +368,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_a (self, entry): #transposition
+    def technique_a (self, entry): #transposition #TH no 3
         fftabs, freqs, fftdata = entry
         indexCO = self.indexFrequency(entry, self.cutoff)
         difference = int(freqs.size/2) - indexCO
@@ -395,7 +395,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_b (self, entry): #composition without cutoff and limited bandwidth to 8 KHz
+    def technique_b (self, entry): #composition without cutoff and limited bandwidth to 8 KHz #TH no 4
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         for i in range (0, 4):
@@ -410,7 +410,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_c (self, entry): #composition without cutoff but bandwidth of 10 KHz
+    def technique_c (self, entry): #composition without cutoff but bandwidth of 10 KHz #TH no 4
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
         for i in range (0, 10):
@@ -425,7 +425,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_d (self, entry): #composition with cutoff, 8 KHz and unchanged destination regions
+    def technique_d (self, entry): #composition with cutoff, 8 KHz and unchanged destination regions #TH no 5
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
@@ -441,7 +441,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_e (self, entry): #composition with cutoff, 8 KHz and narrow destination regions
+    def technique_e (self, entry): #composition with cutoff, 8 KHz and narrow destination regions #TH no 6
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
@@ -458,7 +458,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_f (self, entry): #composition with cutoff, 10 Khz and unchanged destination regions
+    def technique_f (self, entry): #composition with cutoff, 10 Khz and unchanged destination regions #TH no 5
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
@@ -474,7 +474,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
-    def technique_g (self, entry): #composition with cutoff, 10 KHz and narrow destination regions
+    def technique_g (self, entry): #composition with cutoff, 10 KHz and narrow destination regions #TH no 6
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
         cutoff = self.indexFrequency(entry, self.cutoff)
