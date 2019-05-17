@@ -76,16 +76,9 @@ class FrequencyCompression:
         print("Low content is: ", low_content)
         print("High content is: ", high_content)
    
-    #It normalizes the fft values in order to increase their volume - NOT USED
-    def stretching (self, fftdata, fftabs):
-        maximum_data = np.max(fftabs)
-        #print("maximum_data: ", maximum_data)
-        maximum = ((2**16))-1
-        normalization_factor = maximum/maximum_data
-        for i in range(len(fftdata)):
-            fftdata[i] *= normalization_factor
-            fftabs[i] *= normalization_factor
-        return fftdata, fftabs
+    #It calculates the constant to normalize the fft values in order to increase their volume - NOT USED
+    def normalizationConstant (self, pre_signal, post_signal): #pre_signal before frequency manipulation; post_signal after frequency manipulation
+         return pre_signal/post_signal
   
     #It calculates the low pass Butterworth filter and plots it - DEPRECATED
     def lowPassFilter (self):
