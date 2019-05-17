@@ -334,6 +334,7 @@ class FrequencyCompression:
         
     def technique_2 (self, entry): #compression #TH: no 2
         fftabs, freqs, fftdata = entry
+        sum_pre_signal = sum(fftabs)
         self.cutoffActivator(entry)
         f_out_max = self.fOutMax()
         f_out_max = self.indexFrequency(entry, f_out_max)
@@ -364,6 +365,10 @@ class FrequencyCompression:
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
+        sum_post_signal = sum(fftabs)
+        k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
+        fftdata *= k
+        fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
