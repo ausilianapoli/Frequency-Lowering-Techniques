@@ -280,10 +280,6 @@ class FrequencyCompression:
         for i in range(indexCO, f_out_max+1):
             fftdata[indexCO - difference + i] += fftdata[i]
             fftabs[indexCO - difference +i] += fftabs[i]
-        #Butterworth filter
-        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        #fftdata = signal.lfilter(b, a, fftdata)
-        #fftabs = signal.lfilter(b, a, fftabs)
         #Ideal filter
         #fftdata[f_out_max+1 : fftdata.size] = 0
         #fftabs[f_out_max+1 : fftdata.size] = 0
@@ -363,6 +359,7 @@ class FrequencyCompression:
         
     def technique_a (self, entry): #transposition #TH no 3
         fftabs, freqs, fftdata = entry
+        sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
         difference = int(freqs.size/2) - indexCO
         for i in range(indexCO, int(freqs.size/2)+1):
@@ -380,11 +377,14 @@ class FrequencyCompression:
         #Ideal filter
         #fftdata[indexCO : indexCO_spec] = 0
         #fftabs[indexCO : indexCO_spec] = 0
-        #fftdata, fftabs = self.stretching(fftdata, fftabs)
         #My Butterworth filter
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
+        sum_post_signal = sum(fftabs)
+        k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
+        fftdata *= k
+        fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
