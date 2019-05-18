@@ -147,10 +147,10 @@ class FrequencyCompression:
         plt.show()
         return mask
     
-    #It applys gaussianHPFilter simply (it's used in Comparator.py)
-    def applyHPGaussian(self, entry):
+    #It applys butterHPFilter simply (it's used in Comparator.py)
+    def applyHPButter(self, entry):
         fftabs, freqs, fftdata = entry
-        mask = self.gaussianHPFilter(entry)
+        mask = self.butterHPFilter(entry)
         fftdata *= mask
         fftabs *= mask
         t = (fftabs, freqs, fftdata)
