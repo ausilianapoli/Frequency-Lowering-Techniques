@@ -406,20 +406,23 @@ class FrequencyCompression:
     def technique_b (self, entry): #composition without cutoff and limited bandwidth to 8 KHz #TH no 4
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
-        sum_pre_signal = sum(fftabs)
+        #sum_pre_signal = sum(fftabs)
         for i in range (0, 4):
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
+                #specular
+                fftabs[freqs.size - j] += fftabs[freqs.size - k]
+                fftdata[freqs.size - j] += fftdata[freqs.size - k]
                 j+=1
                 if j > sup_dst:
                     j = inf_dst
-        sum_post_signal = sum(fftabs)
-        k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
-        fftdata *= k
-        fftabs *= k
+        #sum_post_signal = sum(fftabs)
+        #k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
+        #fftdata *= k
+        #fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
         
