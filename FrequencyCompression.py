@@ -518,6 +518,9 @@ class FrequencyCompression:
             for k in range (cutoff, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
+                #specular
+                fftabs[freqs.size - j] += fftabs[freqs.size - k]
+                fftdata[freqs.size - j] += fftdata[freqs.size - k]
                 j+=1
                 if j > narrow_sup_dst:
                     j = inf_dst
