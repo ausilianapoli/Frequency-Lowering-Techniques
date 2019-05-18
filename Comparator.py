@@ -9,7 +9,7 @@ from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
-
+from matplotlib import pyplot as plt
 
 low_cutoff = 4000
 high_cutoff = 6000
@@ -82,13 +82,21 @@ for i in range (1, number):
     am_ct.save_file("testing/{}{}/{}ctlp".format(name, i, name), i, am_ct.audio_file[i-1][1], signal)
     am_ctlp.read_file("./records/testing/{:s}{:d}/{:s}ctlp_{:d}.wav"\
                         .format(name, i, name, i))
-#9 - Plot waveform and spectrogram
+#9 - Plot and save waveform and spectrogram
     gr.waveform(am.audio_file[i-1])
+    plt.savefig("WAVE_{}.png".format(am.audio_file[i-1]))
     gr.waveform(am_lp.audio_file[i-1])
+    plt.savefig("WAVE_{}.png".format(am_lp.audio_file[i-1]))
     gr.waveform(am_ct.audio_file[i-1])
+    plt.savefig("WAVE_{}.png".format(am_ct.audio_file[i-1]))
     gr.waveform(am_ctlp.audio_file[i-1])
+    plt.savefig("WAVE_{}.png".format(am_ctlp.audio_file[i-1]))
     gr.spectrogram(am.audio_file[i-1])
+    plt.savefig("SPECT_{}.png".format(am.audio_file[i-1]))
     gr.spectrogram(am_lp.audio_file[i-1])
+    plt.savefig("SPECT_{}.png".format(am_lp.audio_file[i-1]))
     gr.spectrogram(am_ct.audio_file[i-1])
+    plt.savefig("SPECT_{}.png".format(am_ct.audio_file[i-1]))
     gr.spectrogram(am_ctlp.audio_file[i-1])
+    plt.savefig("SPECT_{}.png".format(am_ctlp.audio_file[i-1]))
     
