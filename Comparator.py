@@ -51,7 +51,7 @@ for i in range (1, number):
 #3b - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
-    fc_ct.technique_2(ft_ct.audio_fft[i-1])
+    fc_ct.technique_f(ft_ct.audio_fft[i-1])
 #5b - Frequency to Time domain for compression technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
