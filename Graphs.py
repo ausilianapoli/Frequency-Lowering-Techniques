@@ -18,6 +18,7 @@ class Graphs:
         plt.plot(entry[2])
         plt.title("Waveform: {}"\
                   .format(entry[0]))
+        plt.savefig("{}_WAVE.png".format(entry[0]))
         plt.show()
     
     #It plots the frequency spectrum aftet fft    
@@ -41,4 +42,5 @@ class Graphs:
         plt.ylabel("Frequency")
         plt.title("Spectrogram: {}"\
                   .format(entry[0]))
+        plt.savefig("{}_SPECT.png".format(entry[0]))
         plt.show()
