@@ -61,7 +61,7 @@ for i in range (1, number):
 #3c - Time to Frequency domain for high pass filter
     ft_hp.time_to_frequency(am.audio_file[i-1])
 #4c - Applying high pass filter
-    fc_hp.applyHPGaussian(ft_hp.audio_fft[i-1])
+    fc_hp.applyHPButter(ft_hp.audio_fft[i-1])
 #5c - Frequency to Time domain for high pass filter
     ft_hp.frequency_to_time(fc_hp.audio_fc[i-1])
 #6c - Save new wav file with high pass filter
