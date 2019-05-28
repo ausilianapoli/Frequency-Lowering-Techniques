@@ -12,6 +12,8 @@ import math
 
 class FrequencyCompression:
     
+    octave = 2000
+    
     def __init__ (self, low_cutoff, high_cutoff, ratio, CR, samplerate):
         self.low_cutoff = low_cutoff
         self.high_cutoff = high_cutoff
@@ -376,23 +378,17 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
-        difference = int(freqs.size/2) - indexCO
-        for i in range(indexCO, int(freqs.size/2)+1):
-            fftdata[indexCO - difference + i] += fftdata[i]
-            fftabs[indexCO - difference + i] += fftabs[i]
-        indexCO_spec = freqs.size - indexCO
-        difference_spec = indexCO_spec - int(freqs.size/2)
-        for i in range(difference_spec):
-            fftdata[indexCO_spec + i] += fftdata[int(freqs.size/2)+1 + i]
-            fftabs[indexCO_spec + i] += fftabs[int(freqs.size/2)+1 + i]
-        #Butterworth filter
-        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        #fftdata = signal.lfilter(b, a, fftdata)
-        #fftabs = signal.lfilter(b, a, fftabs)
-        #Ideal filter
-        #fftdata[indexCO : indexCO_spec] = 0
-        #fftabs[indexCO : indexCO_spec] = 0
-        #My Butterworth filter
+        peak_frequency = np.where(max(fftabs[indexCO:]))
+        target_octave = peak_frequency - self.octave
+        self.cutoff = (peak_frequency/freqs.size)*self.samplerate
+        for i in range(self.octave):
+            fftdata[target_octave - self.octave/2 + i ] += (fftdata[peak_frequency - self.octave/2 + i]/2)
+            fftabs[target_octave - self.octave/2 + i ] += (fftabs[peak_frequency - self.octave/2 + i]/2)
+        spec_peak_frequency = int(freqs.size/2) - peak_frequency
+        spec_target_octave = spec_peak_frequency + self.octave
+        for i in range(self.octave):
+            fftdata[spec_target_octave + self.octave/2 - i] += (fftdata[spec_peak_frequency + self.octave/2 - i]/2)
+            fftabs[spec_target_octave + self.octave/2 - i] += (fftabs[spec_peak_frequency + self.octave/2 - i]/2)
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
