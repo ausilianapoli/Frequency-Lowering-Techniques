@@ -62,12 +62,12 @@ def test_Graphs_2(list_file_out): #for output
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
-        fc.technique_g(list_fft[i])
+        fc.technique_a(list_fft[i])
     return fc.audio_fc
     
 #---- MAIN ----
 
-low_cutoff = 4000
+low_cutoff = 2500
 high_cutoff = 6000
 ratio = 0.5
 CR = 2
