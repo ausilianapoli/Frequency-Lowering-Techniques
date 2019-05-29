@@ -378,17 +378,20 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
-        peak_frequency = np.where(max(fftabs[indexCO:]))
+        reduced_fftabs = fftabs[indexCO:]
+        peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs))
+        #print(peak_frequency[0])
+        peak_frequency = int(peak_frequency[0])
         target_octave = peak_frequency - self.octave
         self.cutoff = (peak_frequency/freqs.size)*self.samplerate
         for i in range(self.octave):
-            fftdata[target_octave - self.octave/2 + i ] += (fftdata[peak_frequency - self.octave/2 + i]/2)
-            fftabs[target_octave - self.octave/2 + i ] += (fftabs[peak_frequency - self.octave/2 + i]/2)
+            fftdata[target_octave - int(self.octave/2) + i ] += (fftdata[peak_frequency - int(self.octave/2) + i]*self.ratio)
+            fftabs[target_octave - int(self.octave/2) + i ] += (fftabs[peak_frequency - int(self.octave/2) + i]*self.ratio)
         spec_peak_frequency = int(freqs.size/2) - peak_frequency
         spec_target_octave = spec_peak_frequency + self.octave
         for i in range(self.octave):
-            fftdata[spec_target_octave + self.octave/2 - i] += (fftdata[spec_peak_frequency + self.octave/2 - i]/2)
-            fftabs[spec_target_octave + self.octave/2 - i] += (fftabs[spec_peak_frequency + self.octave/2 - i]/2)
+            fftdata[spec_target_octave + int(self.octave/2) - i] += (fftdata[spec_peak_frequency + int(self.octave/2) - i]/2)
+            fftabs[spec_target_octave + int(self.octave/2) - i] += (fftabs[spec_peak_frequency + int(self.octave/2) - i]/2)
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
