@@ -10,7 +10,7 @@ from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
 
-low_cutoff = 4000
+low_cutoff = 2500
 high_cutoff = 6000
 cutoff_lp = 10000 #or 8000
 ratio = 0.5
@@ -51,7 +51,7 @@ for i in range (1, number):
 #3b - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
-    fc_ct.technique_f(ft_ct.audio_fft[i-1])
+    fc_ct.technique_a(ft_ct.audio_fft[i-1])
 #5b - Frequency to Time domain for compression technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
