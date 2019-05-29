@@ -381,7 +381,7 @@ class FrequencyCompression:
         reduced_fftabs = fftabs[indexCO:]
         peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs))
         #print(peak_frequency[0])
-        peak_frequency = int(peak_frequency[0])
+        peak_frequency = int(peak_frequency[0][0])
         target_octave = peak_frequency - self.octave
         self.cutoff = (peak_frequency/freqs.size)*self.samplerate
         for i in range(self.octave):
