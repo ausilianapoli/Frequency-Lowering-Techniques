@@ -114,11 +114,10 @@ class FrequencyCompression:
         return mask
     
     #It calculates the High Pass Butterworth based on its mathematic formula (it's used in frequency domain)
-    def butterHPFilter (self, entry):
+    def butterHPFilter (self, entry, n = 1): #n is order filter
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
         indexCutoff = self.indexFrequency(entry, self.cutoff)
-        n = 1 #order filter
         for i in range(int(len(mask)/2)):
             mask[i] = 1 - 1/(1 + (i/indexCutoff)**(2*n))
             mask[len(mask) - 1 - i] =  mask[i]
@@ -149,9 +148,9 @@ class FrequencyCompression:
         return mask
     
     #It applys butterHPFilter simply (it's used in Comparator.py)
-    def applyHPButter(self, entry):
+    def applyHPButter(self, entry, n = 1):
         fftabs, freqs, fftdata = entry
-        mask = self.butterHPFilter(entry)
+        mask = self.butterHPFilter(entry, n)
         fftdata *= mask
         fftabs *= mask
         t = (fftabs, freqs, fftdata)
