@@ -97,11 +97,10 @@ class FrequencyCompression:
         return b, a #b=denominator coeff; a=numerator coeff
     
     #It calculates the Low Pass Butterworth based on its mathematic formula (it's used in frequency domain)
-    def butterLPFilter (self, entry):
+    def butterLPFilter (self, entry, n = 1): #n is order filter
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
         indexCutoff = self.indexFrequency(entry, self.cutoff)
-        n = 1 #order filter
         for i in range(int(len(mask)/2)):
             mask[i] = 1/(1 + (i/indexCutoff)**(2*n))
             mask[len(mask) - 1 - i] =  mask[i]
@@ -159,9 +158,9 @@ class FrequencyCompression:
         self.audio_fc.append(t)
      
     #It applys butterLPFilter simply (it's used in Comparator.py)
-    def applyLPButter (self, entry):
+    def applyLPButter (self, entry, n=1):
         fftabs, freqs, fftdata = entry
-        mask = self.butterLPFilter(entry)
+        mask = self.butterLPFilter(entry, n)
         fftdata *= mask
         fftabs *= mask
         t = (fftabs, freqs, fftdata)
