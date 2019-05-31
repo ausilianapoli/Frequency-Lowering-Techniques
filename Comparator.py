@@ -16,6 +16,7 @@ cutoff_lp = 10000 #or 8000
 ratio = 0.5
 CR = 2
 samplerate = 44100
+n = 6 #order LP butter filter
 name = "Tone" #or "Xylo" #or "Audio" #or "Track" or #Music
 number = 8 #or 6 #or 12 #or 6 #or 4
 am = AudioManaging()
@@ -42,7 +43,7 @@ for i in range (1, number):
 #3a - Time to Frequency domain for low pass filter
     ft_lp.time_to_frequency(am.audio_file[i-1])
 #4a - Applying low pass filter
-    fc_lp.example_2(ft_lp.audio_fft[i-1])
+    fc_lp.applyLPButter(ft_lp.audio_fft[i-1])
 #5a - Frequency to Time domain for low pass filter
     ft_lp.frequency_to_time(fc_lp.audio_fc[i-1])
 #6a - Save new wav file with low pass filter
