@@ -30,7 +30,7 @@ class Graphs:
         plt.plot(entry_fft[1][:int(entry_fft[1].size/2.)], entry_fft[0][:int(entry_fft[1].size/2.)])
         plt.title("Frequency Spectrum: {}"\
                   .format(entry_file[0]))
-        plt.savefig("{}_FREQ.png".format(entry[0]))
+        plt.savefig("{}_FREQ.png".format(entry_file[0]))
         plt.show()
 
     #It plots the spectrogram
