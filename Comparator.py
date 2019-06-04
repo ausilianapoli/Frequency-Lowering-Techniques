@@ -10,7 +10,7 @@ from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
 
-low_cutoff = 4000 #or 2500
+low_cutoff = 2500 #or 4000
 high_cutoff = 6000
 cutoff_lp = 10000 #or 8000
 ratio = 0.5
