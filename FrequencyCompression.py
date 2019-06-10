@@ -101,9 +101,9 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         mask = np.zeros(fftabs.size) #it will be my filter
         indexCutoff = self.indexFrequency(entry, self.cutoff)
-        for i in range(int(len(mask)/2)):
+        for i in range(len(mask)):
             mask[i] = 1/(1 + (i/indexCutoff)**(2*n))
-            mask[len(mask) - 1 - i] =  mask[i]
+            #mask[len(mask) - 1 - i] =  mask[i]
         plt.figure()
         plt.axvline(self.cutoff, color = "k")
         plt.xlim(0, self.samplerate)
@@ -345,24 +345,24 @@ class FrequencyCompression:
             fftdata[indexCO + i] += fftdata[j]
             fftabs[indexCO + i] += fftabs[j]
             i = (i+1)%difference
-        f_out_max_spec = freqs.size - f_out_max
-        indexCO_spec = freqs.size - indexCO
-        difference_spec = indexCO_spec - f_out_max_spec
-        i = 0
-        for j in range(int(freqs.size/2), f_out_max_spec):
-            fftdata[f_out_max_spec + i] += fftdata[j]
-            fftabs[f_out_max_spec + i] += fftabs[j]
-            i = (i+1)%difference_spec
-        #Butterworth filter
-        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        #fftdata = signal.lfilter(b, a, fftdata)
-        #fftabs = signal.lfilter(b, a, fftabs)
-        #Ideal filter
-        #fftdata[f_out_max+1 : f_out_max_spec] = 0
-        #fftabs[f_out_max+1 : f_out_max_spec] = 0
-        #fftdata, fftabs = self.stretching(fftdata, fftabs)
+# =============================================================================
+#         f_out_max_spec = freqs.size - f_out_max
+#         indexCO_spec = freqs.size - indexCO
+#         difference_spec = indexCO_spec - f_out_max_spec
+#         i = 0
+#         for j in range(int(freqs.size/2), f_out_max_spec):
+#             fftdata[f_out_max_spec + i] += fftdata[j]
+#             fftabs[f_out_max_spec + i] += fftabs[j]
+#             i = (i+1)%difference_spec
+# =============================================================================
+        #Specular actions
+        fftdata[int(freqs.size/2):] = 0
+        fftabs [int(freqs.size/2):] = 0
+        fftdata *= 2
+        fftabs *= 2
         #My Butterworth filter
-        mask = self.butterLPFilter(entry)
+        n = 3
+        mask = self.butterLPFilter(entry, n)
         fftdata *= mask
         fftabs *= mask
         sum_post_signal = sum(fftabs)
