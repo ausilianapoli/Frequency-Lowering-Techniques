@@ -10,9 +10,9 @@ from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
 
-low_cutoff = 4000 #or 4000
+low_cutoff = 4000 #or 2500
 high_cutoff = 6000
-cutoff_lp = 8000 #or 10000
+cutoff_lp = 10000 #or 8000
 ratio = 0.5
 CR = 2
 samplerate = 44100
@@ -48,16 +48,16 @@ for i in range (1, number):
     ft_lp.frequency_to_time(fc_lp.audio_fc[i-1])
 #6a - Save new wav file with low pass filter
     signal = am.convert_numpy(ft_lp.audio_ifft[i-1])
-    am.save_file("testing/{}{}/{}lp".format(name, i,name), i, am.audio_file[i-1][1], signal.T)
+    am.save_file("testing/{}{}/{}lp".format(name, i,name), i, am.audio_file[i-1][1], signal)
 #3b - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
-    fc_ct.technique_2(ft_ct.audio_fft[i-1])
+    fc_ct.technique_f(ft_ct.audio_fft[i-1])
 #5b - Frequency to Time domain for compression technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
     signal = am.convert_numpy(ft_ct.audio_ifft[i-1])
-    am.save_file("testing/{}{}/{}ct".format(name, i, name), i, am.audio_file[i-1][1], signal.T)
+    am.save_file("testing/{}{}/{}ct".format(name, i, name), i, am.audio_file[i-1][1], signal)
 #3c - Time to Frequency domain for high pass filter
     ft_hp.time_to_frequency(am.audio_file[i-1])
 #4c - Applying high pass filter
@@ -66,7 +66,7 @@ for i in range (1, number):
     ft_hp.frequency_to_time(fc_hp.audio_fc[i-1])
 #6c - Save new wav file with high pass filter
     signal = am.convert_numpy(ft_hp.audio_ifft[i-1])
-    am.save_file("testing/{}{}/{}hp".format(name, i,name), i, am.audio_file[i-1][1], signal.T)    
+    am.save_file("testing/{}{}/{}hp".format(name, i,name), i, am.audio_file[i-1][1], signal)    
 #7 - Read new wav files
     am_lp.read_file("./records/testing/{:s}{:d}/{:s}lp_{:d}.wav"\
                         .format(name, i, name, i))
