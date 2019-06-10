@@ -10,13 +10,13 @@ from FourierTransform import FourierTransform
 from Graphs import Graphs
 from FrequencyCompression import FrequencyCompression
 
-low_cutoff = 2500 #or 4000
+low_cutoff = 4000 #or 4000
 high_cutoff = 6000
-cutoff_lp = 10000 #or 8000
+cutoff_lp = 8000 #or 10000
 ratio = 0.5
 CR = 2
 samplerate = 44100
-n = 10 #order LP butter filter
+n = 12 #order LP butter filter
 name = "Tone" #or "Xylo" #or "Audio" #or "Track" or #Music
 number = 8 #or 6 #or 12 #or 6 #or 4
 am = AudioManaging()
@@ -52,7 +52,7 @@ for i in range (1, number):
 #3b - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
-    fc_ct.technique_a(ft_ct.audio_fft[i-1])
+    fc_ct.technique_2(ft_ct.audio_fft[i-1])
 #5b - Frequency to Time domain for compression technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
@@ -76,7 +76,7 @@ for i in range (1, number):
                         .format(name, i, name, i))
 #8 - Apply low pass Butter filter in frequency domain, save and read new wav file
     ft_ctlp.time_to_frequency(am_ct.audio_file[i-1])
-    fc_ctlp.applyLPButter(ft_ctlp.audio_fft[i-1])
+    fc_ctlp.applyLPButter(ft_ctlp.audio_fft[i-1], n)
     ft_ctlp.frequency_to_time(fc_ctlp.audio_fc[i-1])
     signal = am_ct.convert_numpy(ft_ctlp.audio_ifft[i-1])
     am_ct.save_file("testing/{}{}/{}ctlp".format(name, i, name), i, am_ct.audio_file[i-1][1], signal)
