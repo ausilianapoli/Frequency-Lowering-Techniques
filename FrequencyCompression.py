@@ -492,11 +492,16 @@ class FrequencyCompression:
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 #specular
-                fftabs[freqs.size - j] += fftabs[freqs.size - k]
-                fftdata[freqs.size - j] += fftdata[freqs.size - k]
+#                fftabs[freqs.size - j] += fftabs[freqs.size - k]
+#                fftdata[freqs.size - j] += fftdata[freqs.size - k]
                 j+=1
                 if j > sup_dst:
                     j = inf_dst
+        #Specular actions
+        fftdata[int(freqs.size/2):] = 0
+        fftabs[int(freqs.size/2):] = 0
+        fftdata *= 2
+        fftabs *= 2
         #sum_post_signal = sum(fftabs)
         #k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
         #fftdata *= k
