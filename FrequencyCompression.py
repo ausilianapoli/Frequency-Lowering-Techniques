@@ -17,7 +17,7 @@ class FrequencyCompression:
     def __init__ (self, low_cutoff, high_cutoff, ratio, CR, samplerate):
         self.low_cutoff = low_cutoff
         self.high_cutoff = high_cutoff
-        self.cutoff = low_cutoff
+        self.cutoff = high_cutoff
         self.ratio = ratio
         self.samplerate = samplerate
         self.CR = CR
@@ -488,14 +488,16 @@ class FrequencyCompression:
         for i in range (0, 10):
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
-            for k in range (cutoff, sup_src+1):
+            if cutoff > inf_src:
+                inf_src = cutoff
+            for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 #specular
 #                fftabs[freqs.size - j] += fftabs[freqs.size - k]
 #                fftdata[freqs.size - j] += fftdata[freqs.size - k]
                 j+=1
-                if j > sup_dst:
+                if j >= sup_dst:
                     j = inf_dst
         #Specular actions
         fftdata[int(freqs.size/2):] = 0
