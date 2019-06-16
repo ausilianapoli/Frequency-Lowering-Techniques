@@ -58,11 +58,16 @@ def test_Graphs_2(list_file_out): #for output
     for i in range(len(list_file_out)):
         g.waveform(list_file_out[i])
         g.spectrogram(list_file_out[i])
+        
+def test_Graphs_3(list_file, list_fft_lowering):
+    g = Graphs()
+    for i in range(len(list_fft_lowering)):
+        g.frequency_spectrum(list_fft_lowering[i], list_file[i])
 
 def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
     fc = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
-        fc.technique_2(list_fft[i])
+        fc.technique_f(list_fft[i])
     return fc.audio_fc
     
 #---- MAIN ----
@@ -71,12 +76,13 @@ low_cutoff = 4000
 high_cutoff = 6000
 ratio = 0.5
 CR = 2
-samplerate = 16000
+samplerate = 20000
 
 list_file = test_AudioManaging_1()
 list_fft = test_FourierTransform_1(list_file)
 test_Graphs_1(list_file, list_fft)
 list_fc = test_FrequencyCompression(list_fft, ratio, CR, samplerate)
+test_Graphs_3(list_file, list_fc)
 list_ifft = test_FourierTransform_2(list_fc)
 test_AudioManaging_2(list_ifft, list_file)
 list_file_out = test_AudioManaging_1(0)
