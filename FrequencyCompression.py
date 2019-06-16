@@ -12,7 +12,7 @@ import math
 
 class FrequencyCompression:
     
-    octave = 2000
+    octave = 20000
     
     def __init__ (self, low_cutoff, high_cutoff, ratio, CR, samplerate):
         self.low_cutoff = low_cutoff
@@ -376,23 +376,30 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
+        print("index cutoff: ", indexCO)
+        print("len fftabs: ", len(fftabs))
         reduced_fftabs = fftabs[indexCO:]
-        peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs))
+        print("len reduced fftabs: ", len(reduced_fftabs))
+        print("len fftabs - len reduced fftabs: ", len(fftabs)-len(reduced_fftabs))
+        peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs)) #peak_frequency is the index of maximum frequency!
         #print(peak_frequency[0])
-        peak_frequency = int(peak_frequency[0][0])
+        peak_frequency = int(peak_frequency[0][0]) + indexCO
+        print("peak frequency: ", peak_frequency)
         target_octave = peak_frequency - self.octave
-        self.cutoff = (peak_frequency/freqs.size)*self.samplerate
+        self.cutoff = ((peak_frequency - self.octave/2)/freqs.size)*self.samplerate
+        print("new cutoff: ", self.cutoff)
         for i in range(self.octave):
             fftdata[target_octave - int(self.octave/2) + i ] += (fftdata[peak_frequency - int(self.octave/2) + i]*self.ratio)
             fftabs[target_octave - int(self.octave/2) + i ] += (fftabs[peak_frequency - int(self.octave/2) + i]*self.ratio)
-        spec_peak_frequency = int(freqs.size/2) - peak_frequency
-        spec_target_octave = spec_peak_frequency + self.octave
-        for i in range(self.octave):
-            fftdata[spec_target_octave + int(self.octave/2) - i] += (fftdata[spec_peak_frequency + int(self.octave/2) - i]/2)
-            fftabs[spec_target_octave + int(self.octave/2) - i] += (fftabs[spec_peak_frequency + int(self.octave/2) - i]/2)
+        #Specular actions
+        fftdata[int(freqs.size/2):] = 0
+        fftabs [int(freqs.size/2):] = 0
+        fftdata *= 2
+        fftabs *= 2
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
+        self.cutoff = self.high_cutoff #reset of cutoff to default value
         sum_post_signal = sum(fftabs)
         k = self.normalizationConstant(sum_pre_signal, sum_post_signal)
         fftdata *= k
