@@ -12,13 +12,13 @@ from FrequencyCompression import FrequencyCompression
 
 low_cutoff = 4000 #or 2500
 high_cutoff = 6000
-cutoff_lp = 10000 #or 8000
+cutoff_lp = 8000 #or 10000
 ratio = 0.5
 CR = 2
 samplerate = 44100
 n = 12 #order LP butter filter
 name = "Tone" #or "Xylo" #or "Audio" #or "Track" or #Music
-number = 8 #or 6 #or 12 #or 6 #or 4
+number = 12 #or 6 #or 12 #or 6 #or 4
 am = AudioManaging()
 am_lp = AudioManaging() #low pass
 am_ct = AudioManaging() #compression technique
@@ -52,7 +52,7 @@ for i in range (1, number):
 #3b - Time to Frequency domain for compression technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
 #4b - Applying compression technique
-    fc_ct.technique_f(ft_ct.audio_fft[i-1])
+    fc_ct.technique_a(ft_ct.audio_fft[i-1])
 #5b - Frequency to Time domain for compression technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
 #6b - Save new wav file with compression technique
