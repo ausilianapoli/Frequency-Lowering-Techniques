@@ -509,6 +509,14 @@ class FrequencyCompression:
         #fftdata *= k
         #fftabs *= k
         t = (fftabs, freqs, fftdata)
+        #---start testing---
+        arr = [125, 8000, 3399, 3558, 3731, 3922, 4130, 4361]
+        for i in range (len(arr)):
+            index = self.indexFrequency(t, arr[i])
+            print("fftabs[{}] = {}".format(index, fftabs[index]))
+        result = np.where(fftabs > fftabs[self.indexFrequency(t, 8000)])
+        print("result: ", result)
+        #---end testing---
         self.audio_fc.append(t)
         
     def technique_g (self, entry): #composition with cutoff, 10 KHz and narrow destination regions #TH no 6
