@@ -376,18 +376,19 @@ class FrequencyCompression:
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
-        print("index cutoff: ", indexCO)
-        print("len fftabs: ", len(fftabs))
-        reduced_fftabs = fftabs[indexCO:]
-        print("len reduced fftabs: ", len(reduced_fftabs))
-        print("len fftabs - len reduced fftabs: ", len(fftabs)-len(reduced_fftabs))
+        #print("index cutoff: ", indexCO)
+        #print("len fftabs: ", len(fftabs))
+        nyquist = 220500 #parameter dependent to samplerate: it is tailored for pure tones
+        reduced_fftabs = fftabs[indexCO:nyquist]
+        #print("len reduced fftabs: ", len(reduced_fftabs))
+        #print("len fftabs - len reduced fftabs: ", len(fftabs)-len(reduced_fftabs))
         peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs)) #peak_frequency is the index of maximum frequency!
         #print(peak_frequency[0])
         peak_frequency = int(peak_frequency[0][0]) + indexCO
-        print("peak frequency: ", peak_frequency)
+        #print("peak frequency: ", peak_frequency)
         target_octave = peak_frequency - self.octave
         self.cutoff = ((peak_frequency - self.octave/2)/freqs.size)*self.samplerate
-        print("new cutoff: ", self.cutoff)
+        #print("new cutoff: ", self.cutoff)
         for i in range(self.octave):
             fftdata[target_octave - int(self.octave/2) + i ] += (fftdata[peak_frequency - int(self.octave/2) + i]*self.ratio)
             fftabs[target_octave - int(self.octave/2) + i ] += (fftabs[peak_frequency - int(self.octave/2) + i]*self.ratio)
@@ -396,7 +397,8 @@ class FrequencyCompression:
         fftabs [int(freqs.size/2):] = 0
         fftdata *= 2
         fftabs *= 2
-        mask = self.butterLPFilter(entry)
+        butter_order = 25
+        mask = self.butterLPFilter(entry, butter_order)
         fftdata *= mask
         fftabs *= mask
         self.cutoff = self.high_cutoff #reset of cutoff to default value
