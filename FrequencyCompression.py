@@ -32,20 +32,6 @@ class FrequencyCompression:
         #print("index -> ", index)
         return int(index)
     
-    #It finds and calculates the index of the max output frequency - DEPRECATED
-    def indexFOutMax (self, entry):
-        indexCO = self.indexFrequency(entry)
-        f_in_max = self.samplerate/2
-        f_in = f_in_max ** self.ratio
-        f_co = indexCO ** (1 - self.ratio)
-        f_out_max = int(f_in * f_co)
-        #print("indexCO -> ", indexCO)
-        #print("f_in_max -> ", f_in_max)
-        #print("f_in -> ", f_in)
-        #print("f_co -> ", f_co)
-        #print("f_out_max -> ", f_out_max)
-        return f_out_max
-    
     #It calculates the maximum output frequency: the returned value is the frequency and not the index in the fft array
     def fOutMax (self):
         f_in_max = self.samplerate/2
@@ -54,15 +40,6 @@ class FrequencyCompression:
         f_out_max = int(f_in * f_co)
         return f_out_max
     
-    #It compares two ways for calculating maximum output frequency - PRIVATE USE
-    def compareFOutMax (self, entry):
-        index = self.indexFOutMax(entry)
-        freq = self.fOutMax()
-        index_freq = (freq/self.samplerate)*entry[1].size
-        print("index: ", index)
-        print("index_freq: ", index_freq)
-        print(index == index_freq)
-        
     #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
     def cutoffActivator (self, entry):
         fftabs, freqs, fftdata = entry
@@ -82,20 +59,6 @@ class FrequencyCompression:
     def normalizationConstant (self, pre_signal, post_signal): #pre_signal before frequency manipulation; post_signal after frequency manipulation
          return pre_signal/post_signal
   
-    #It calculates the low pass Butterworth filter and plots it - DEPRECATED
-    def lowPassFilter (self):
-        f_out_max = self.fOutMax()
-        b, a = signal.butter(1, f_out_max/(self.samplerate/2), btype = "low")
-        w, h = signal.freqz(b, a)
-        plt.plot(0.5*self.samplerate*w/np.pi, np.abs(h), "b")
-        plt.axvline(f_out_max, color = "k")
-        plt.xlim(0, 0.5*self.samplerate)
-        plt.title("Lowpass Filter Frequency Response")
-        plt.xlabel('Frequency [Hz]')
-        plt.grid()
-        plt.show()
-        return b, a #b=denominator coeff; a=numerator coeff
-    
     #It calculates the Low Pass Butterworth based on its mathematic formula (it's used in frequency domain)
     def butterLPFilter (self, entry, n = 1): #n is order filter
         fftabs, freqs, fftdata = entry
@@ -145,6 +108,15 @@ class FrequencyCompression:
         plt.grid()
         plt.plot(mask)
         plt.show()
+        return mask
+    
+    def idealLPFilter(self, entry):
+        fftabs, freqs, fftdata = entry
+        indexCutoff = self.indexFrequency(entry, self.cutoff)
+        mask = np.zeros(fftabs.size) #it will be my filter
+        mask[:indexCutoff] = 1
+        spec_indexCutoff = freqs.size - indexCutoff
+        mask[spec_indexCutoff:] = 1
         return mask
     
     #It applys butterHPFilter simply (it's used in Comparator.py)
@@ -397,8 +369,8 @@ class FrequencyCompression:
         fftabs [int(freqs.size/2):] = 0
         fftdata *= 2
         fftabs *= 2
-        butter_order = 25
-        mask = self.butterLPFilter(entry, butter_order)
+        #butter_order = 25
+        mask = self.idealLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
         self.cutoff = self.high_cutoff #reset of cutoff to default value
@@ -457,7 +429,9 @@ class FrequencyCompression:
         for i in range (0, 4):
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
-            for k in range (cutoff, sup_src+1):
+            if cutoff > inf_src:
+                inf_src = cutoff
+            for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 #specular
@@ -477,7 +451,9 @@ class FrequencyCompression:
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             narrow_sup_dst = ((sup_dst - inf_dst)/(cutoff - inf_src))*(sup_src - inf_src) #it's proportion between regions' dimensions
-            for k in range (cutoff, sup_src+1):
+            if cutoff > inf_src:
+                inf_src = cutoff
+            for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 #specular
@@ -536,7 +512,9 @@ class FrequencyCompression:
             inf_dst, sup_dst, inf_src, sup_src = list_region[i]
             j = inf_dst
             narrow_sup_dst = ((sup_dst - inf_dst)/(cutoff - inf_src))*(sup_src - inf_src) #it's proportion between regions' dimensions
-            for k in range (cutoff, sup_src+1):
+            if cutoff > inf_src:
+                inf_src = cutoff
+            for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
                 #specular
