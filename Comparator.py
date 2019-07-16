@@ -8,7 +8,7 @@ Created on Wed Apr 24 17:30:28 2019
 from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
-from FrequencyCompression import FrequencyCompression
+from FrequencyLowering import FrequencyLowering
 
 low_cutoff = 4000 #or 2500
 high_cutoff = 6000
@@ -29,10 +29,10 @@ ft_ct = FourierTransform() #lowering technique
 ft_hp = FourierTransform() #high pass
 ft_ctlp = FourierTransform() #before lowering technique, after low pass 
 gr = Graphs()
-fc_lp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #low pass
-fc_ct = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #lowering technique
-fc_hp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #high pass
-fc_ctlp = FrequencyCompression(cutoff_lp, cutoff_lp, ratio, CR, samplerate) #before lowering technique, after low pass
+fc_lp = FrequencyLowering(low_cutoff, high_cutoff, ratio, CR, samplerate) #low pass
+fc_ct = FrequencyLowering(low_cutoff, high_cutoff, ratio, CR, samplerate) #lowering technique
+fc_hp = FrequencyLowering(low_cutoff, high_cutoff, ratio, CR, samplerate) #high pass
+fc_ctlp = FrequencyLowering(cutoff_lp, cutoff_lp, ratio, CR, samplerate) #before lowering technique, after low pass
 
 for i in range (1, number):
 #1 - Take path

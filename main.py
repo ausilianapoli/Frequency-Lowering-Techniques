@@ -8,7 +8,7 @@ Created on Mon Feb 18 19:19:19 2019
 from AudioManaging import AudioManaging
 from FourierTransform import FourierTransform
 from Graphs import Graphs
-from FrequencyCompression import FrequencyCompression
+from FrequencyLowering import FrequencyLowering
 
 def test_AudioManaging_1(first=1): #first=1 for initial operations on input; first=0 for last operation on output
     a = AudioManaging()
@@ -64,8 +64,8 @@ def test_Graphs_3(list_file, list_fft_lowering):
     for i in range(len(list_fft_lowering)):
         g.frequency_spectrum(list_fft_lowering[i], list_file[i])
 
-def test_FrequencyCompression(list_fft, ratio, CR, samplerate):
-    fc = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate)
+def test_FrequencyLowering(list_fft, ratio, CR, samplerate):
+    fc = FrequencyLowering(low_cutoff, high_cutoff, ratio, CR, samplerate)
     for i in range(len(list_fft)):
         fc.technique_f(list_fft[i])
     return fc.audio_fc
@@ -81,7 +81,7 @@ samplerate = 20000
 list_file = test_AudioManaging_1()
 list_fft = test_FourierTransform_1(list_file)
 test_Graphs_1(list_file, list_fft)
-list_fc = test_FrequencyCompression(list_fft, ratio, CR, samplerate)
+list_fc = test_FrequencyLowering(list_fft, ratio, CR, samplerate)
 test_Graphs_3(list_file, list_fc)
 list_ifft = test_FourierTransform_2(list_fc)
 test_AudioManaging_2(list_ifft, list_file)

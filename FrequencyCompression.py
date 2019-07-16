@@ -10,7 +10,7 @@ from scipy import signal
 from matplotlib import pyplot as plt
 import math
 
-class FrequencyCompression:
+class FrequencyLowering:
     
     octave = 20000
     
@@ -32,7 +32,7 @@ class FrequencyCompression:
         #print("index -> ", index)
         return int(index)
     
-    #It calculates the maximum output frequency: the returned value is the frequency and not the index in the fft array
+    #COMPRESSION - It calculates the maximum output frequency: the returned value is the frequency and not the index in the fft array
     def fOutMax (self):
         f_in_max = self.samplerate/2
         f_in = f_in_max ** self.ratio
@@ -40,7 +40,7 @@ class FrequencyCompression:
         f_out_max = int(f_in * f_co)
         return f_out_max
     
-    #It analyzes spectral content in order to activate the lower or the higher cutoff frequency
+    #COMPRESSION - It analyzes spectral content in order to activate the lower or the higher cutoff frequency
     def cutoffActivator (self, entry):
         fftabs, freqs, fftdata = entry
         threshold = self.indexFrequency(entry, 3500)
@@ -55,7 +55,7 @@ class FrequencyCompression:
         print("Low content is: ", low_content)
         print("High content is: ", high_content)
    
-    #It calculates the constant to normalize the fft values in order to increase their volume - NOT USED
+    #It calculates the constant to normalize the fft values in order to increase their volume
     def normalizationConstant (self, pre_signal, post_signal): #pre_signal before frequency manipulation; post_signal after frequency manipulation
          return pre_signal/post_signal
   
@@ -137,7 +137,7 @@ class FrequencyCompression:
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
     
-    #It creates the list of the indeces of every region for composition techniques (minimal region)
+    #COMPOSITION - It creates the list of the indeces of every region for composition techniques (minimal region)
     def createRegion (self, entry):
         list_region = []
         #1 region
@@ -170,7 +170,7 @@ class FrequencyCompression:
         list_region.append(t)
         return list_region
     
-    #It creates the list of the indeces of every region for composition techniques until 10KHz
+    #COMPOSITION - It creates the list of the indeces of every region for composition techniques until 10KHz
     def createRegionExtended (self, entry):
         list_region = self.createRegion(entry)
         #5 region
@@ -219,30 +219,8 @@ class FrequencyCompression:
  
 #Techniques:
         
-    def example_1 (self, entry):
-        fftabs, freqs, fftdata = entry
-        self.cutoffActivator(entry)
-        f_out_max = self.fOutMax()
-        f_out_max = self.indexFrequency(entry, f_out_max)
-        for i in range(f_out_max+1, fftdata.size):
-            fftdata[i] = 0
-            fftabs[i] = 0
-        t = (fftabs, freqs, fftdata)
-        self.audio_fc.append(t)
-        
-    def example_2 (self, entry):
-        fftabs, freqs, fftdata = entry
-        self.cutoffActivator(entry)
-        f_out_max = self.fOutMax()
-        f_out_max = self.indexFrequency(entry, f_out_max)
-        f_out_max_spec = freqs.size - f_out_max
-        for i in range (f_out_max+1, f_out_max_spec):
-            fftdata[i] = 0
-            fftabs[i] = 0
-        t =(fftabs, freqs, fftdata)
-        self.audio_fc.append(t)
-        
-    def technique_1A (self, entry): #compression #TH: no 1
+    #COMPRESSION      
+    def technique_1A (self, entry): #TH: no 1
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         self.cutoffActivator(entry)
@@ -267,8 +245,9 @@ class FrequencyCompression:
         fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
-    def technique_1B (self, entry): #compression
+    
+    #COMPRESSION
+    def technique_1B (self, entry):
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         self.cutoffActivator(entry)
@@ -285,15 +264,6 @@ class FrequencyCompression:
         for i in range(f_out_max_spec, indexCO_spec+1):
             fftdata[indexCO_spec + difference_spec - i] += fftdata[i]
             fftabs[indexCO_spec + difference_spec - i] += fftabs[i]
-        #Butterworth filter
-        #b, a = self.lowPassFilter() #b=denominator coeff; a=numerator coeff
-        #fftdata = signal.lfilter(b, a, fftdata)
-        #fftabs = signal.lfilter(b, a, fftabs)
-        #Ideal filter
-        #fftdata[f_out_max+1 : f_out_max_spec] = 0
-        #fftabs[f_out_max+1 : f_out_max_spec] = 0
-        #fftdata, fftabs = self.stretching(fftdata, fftabs)
-        #My Butterworth filter
         mask = self.butterLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
@@ -303,8 +273,9 @@ class FrequencyCompression:
         fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
-    def technique_2 (self, entry): #compression #TH: no 2
+    
+	#COMPRESSION     
+    def technique_2 (self, entry): #TH: no 2
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         self.cutoffActivator(entry)
@@ -317,16 +288,6 @@ class FrequencyCompression:
             fftdata[indexCO + i] += fftdata[j]
             fftabs[indexCO + i] += fftabs[j]
             i = (i+1)%difference
-# =============================================================================
-#         f_out_max_spec = freqs.size - f_out_max
-#         indexCO_spec = freqs.size - indexCO
-#         difference_spec = indexCO_spec - f_out_max_spec
-#         i = 0
-#         for j in range(int(freqs.size/2), f_out_max_spec):
-#             fftdata[f_out_max_spec + i] += fftdata[j]
-#             fftabs[f_out_max_spec + i] += fftabs[j]
-#             i = (i+1)%difference_spec
-# =============================================================================
         #Specular actions
         fftdata[int(freqs.size/2):] = 0
         fftabs [int(freqs.size/2):] = 0
@@ -343,24 +304,18 @@ class FrequencyCompression:
         fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
-    def technique_a (self, entry): #transposition #TH no 3
+       
+	#TRANSPOSITION 
+    def technique_a (self, entry): #TH no 3
         fftabs, freqs, fftdata = entry
         sum_pre_signal = sum(fftabs)
         indexCO = self.indexFrequency(entry, self.cutoff)
-        #print("index cutoff: ", indexCO)
-        #print("len fftabs: ", len(fftabs))
         nyquist = 220500 #parameter dependent to samplerate: it is tailored for pure tones
         reduced_fftabs = fftabs[indexCO:nyquist]
-        #print("len reduced fftabs: ", len(reduced_fftabs))
-        #print("len fftabs - len reduced fftabs: ", len(fftabs)-len(reduced_fftabs))
         peak_frequency = np.where(reduced_fftabs == max(reduced_fftabs)) #peak_frequency is the index of maximum frequency!
-        #print(peak_frequency[0])
         peak_frequency = int(peak_frequency[0][0]) + indexCO
-        #print("peak frequency: ", peak_frequency)
         target_octave = peak_frequency - self.octave
         self.cutoff = ((peak_frequency - self.octave/2)/freqs.size)*self.samplerate
-        #print("new cutoff: ", self.cutoff)
         for i in range(self.octave):
             fftdata[target_octave - int(self.octave/2) + i ] += (fftdata[peak_frequency - int(self.octave/2) + i]*self.ratio)
             fftabs[target_octave - int(self.octave/2) + i ] += (fftabs[peak_frequency - int(self.octave/2) + i]*self.ratio)
@@ -369,7 +324,7 @@ class FrequencyCompression:
         fftabs [int(freqs.size/2):] = 0
         fftdata *= 2
         fftabs *= 2
-        #butter_order = 25
+        #low pass filter
         mask = self.idealLPFilter(entry)
         fftdata *= mask
         fftabs *= mask
@@ -380,7 +335,8 @@ class FrequencyCompression:
         fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
+      
+	#COMPOSITION  
     def technique_b (self, entry): #composition without cutoff and limited bandwidth to 8 KHz #TH no 4
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
@@ -403,7 +359,8 @@ class FrequencyCompression:
         #fftabs *= k
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
+
+	#COMPOSITION       
     def technique_c (self, entry): #composition without cutoff but bandwidth of 10 KHz #TH no 4
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
@@ -421,7 +378,8 @@ class FrequencyCompression:
                     j = inf_dst
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
+  
+	#COMPOSITION      
     def technique_d (self, entry): #composition with cutoff, 8 KHz and unchanged destination regions #TH no 5
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
@@ -442,7 +400,8 @@ class FrequencyCompression:
                     j = inf_dst
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
+     
+	#COMPOSITION   
     def technique_e (self, entry): #composition with cutoff, 8 KHz and narrow destination regions #TH no 6
         list_region = self.createRegion(entry)
         fftabs, freqs, fftdata = entry
@@ -464,7 +423,8 @@ class FrequencyCompression:
                     j = inf_dst
         t = (fftabs, freqs, fftdata)
         self.audio_fc.append(t)
-        
+
+	#COMPOSITION      
     def technique_f (self, entry): #composition with cutoff, 10 Khz and unchanged destination regions #TH no 5
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
@@ -478,9 +438,6 @@ class FrequencyCompression:
             for k in range (inf_src, sup_src+1):
                 fftabs[j] += fftabs[k]
                 fftdata[j] += fftdata[k]
-                #specular
-#                fftabs[freqs.size - j] += fftabs[freqs.size - k]
-#                fftdata[freqs.size - j] += fftdata[freqs.size - k]
                 j+=1
                 if j >= sup_dst:
                     j = inf_dst
@@ -494,16 +451,9 @@ class FrequencyCompression:
         #fftdata *= k
         #fftabs *= k
         t = (fftabs, freqs, fftdata)
-        #---start testing---
-        arr = [125, 8000, 3399, 3558, 3731, 3922, 4130, 4361]
-        for i in range (len(arr)):
-            index = self.indexFrequency(t, arr[i])
-            print("fftabs[{}] = {}".format(index, fftabs[index]))
-        result = np.where(fftabs > fftabs[self.indexFrequency(t, 8000)])
-        print("result: ", result)
-        #---end testing---
         self.audio_fc.append(t)
-        
+  
+	#COMPOSITION      
     def technique_g (self, entry): #composition with cutoff, 10 KHz and narrow destination regions #TH no 6
         list_region = self.createRegionExtended(entry)
         fftabs, freqs, fftdata = entry
@@ -524,6 +474,5 @@ class FrequencyCompression:
                 if j > narrow_sup_dst:
                     j = inf_dst
         t = (fftabs, freqs, fftdata)
-        self.audio_fc.append(t)
-        
+        self.audio_fc.append(t) 
             
