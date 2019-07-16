@@ -21,18 +21,18 @@ name = "Tone" #or "Xylo" #or "Audio" #or "Track" or #Music
 number = 8 #or 6 #or 12 #or 6 #or 4
 am = AudioManaging()
 am_lp = AudioManaging() #low pass
-am_ct = AudioManaging() #compression technique
+am_ct = AudioManaging() #lowering technique
 am_hp = AudioManaging() #high pass
-am_ctlp = AudioManaging() #before compression technique, after low pass
+am_ctlp = AudioManaging() #before lowering technique, after low pass
 ft_lp = FourierTransform() #low pass
-ft_ct = FourierTransform() #compression technique
+ft_ct = FourierTransform() #lowering technique
 ft_hp = FourierTransform() #high pass
-ft_ctlp = FourierTransform() #before compression technique, after low pass 
+ft_ctlp = FourierTransform() #before lowering technique, after low pass 
 gr = Graphs()
 fc_lp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #low pass
-fc_ct = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #compression technique
+fc_ct = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #lowering technique
 fc_hp = FrequencyCompression(low_cutoff, high_cutoff, ratio, CR, samplerate) #high pass
-fc_ctlp = FrequencyCompression(cutoff_lp, cutoff_lp, ratio, CR, samplerate) #before compression technique, after low pass
+fc_ctlp = FrequencyCompression(cutoff_lp, cutoff_lp, ratio, CR, samplerate) #before lowering technique, after low pass
 
 for i in range (1, number):
 #1 - Take path
@@ -49,13 +49,13 @@ for i in range (1, number):
 #6a - Save new wav file with low pass filter
     signal = am.convert_numpy(ft_lp.audio_ifft[i-1])
     am.save_file("testing/{}{}/{}lp".format(name, i,name), i, am.audio_file[i-1][1], signal)
-#3b - Time to Frequency domain for compression technique
+#3b - Time to Frequency domain for lowering technique
     ft_ct.time_to_frequency(am.audio_file[i-1])
-#4b - Applying compression technique
+#4b - Applying lowering technique
     fc_ct.technique_a(ft_ct.audio_fft[i-1])
-#5b - Frequency to Time domain for compression technique 
+#5b - Frequency to Time domain for lowering technique 
     ft_ct.frequency_to_time(fc_ct.audio_fc[i-1])
-#6b - Save new wav file with compression technique
+#6b - Save new wav file with lowering technique
     signal = am.convert_numpy(ft_ct.audio_ifft[i-1])
     am.save_file("testing/{}{}/{}ct".format(name, i, name), i, am.audio_file[i-1][1], signal)
 #3c - Time to Frequency domain for high pass filter
